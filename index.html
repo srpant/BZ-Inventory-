@@ -1,0 +1,3051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/>
+<meta name="theme-color" content="#e2d9cc"/>
+<meta name="mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<meta name="apple-mobile-web-app-status-bar-style" content="default"/>
+<meta name="apple-mobile-web-app-title" content="Chef Santosh"/>
+<title>Chef Santosh — Inventory V108.15</title>
+<link rel="manifest" href="manifest.json"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;600;700;900&family=Fugaz+One&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{background:#e8e0d4;font-family:'DM Sans',sans-serif;color:#1a1208;min-height:100vh}
+input,select,button{font-family:'DM Sans',sans-serif;color:#1a1208}
+input::placeholder{color:#7a6a55}
+input:focus,select:focus{outline:none;border-color:#6b2fd4!important;box-shadow:0 0 0 3px #6b2fd422}
+::-webkit-scrollbar{width:6px;height:6px}
+::-webkit-scrollbar-track{background:#ddd5c8}
+::-webkit-scrollbar-thumb{background:#b8a88a;border-radius:3px}
+.trow:hover td{background:rgba(200,190,175,0.35)}
+.trow.selected-row td{background:#ede8ff}
+#app{display:flex;flex-direction:column;min-height:100vh}
+header{background:#e2d9cc;border-bottom:1px solid #bfae96;padding:10px 14px;display:flex;align-items:center;justify-content:space-between;gap:8px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px #0000000f;overflow:hidden}
+main{flex:1;padding:16px 14px 80px;max-width:820px;width:100%;margin:0 auto}
+nav{display:flex;background:#d9d0c2;border-top:2px solid #bfae96;flex-shrink:0;padding:6px 8px;gap:5px;overflow-x:auto;-webkit-overflow-scrolling:touch;position:sticky;bottom:0;z-index:100;box-shadow:0 -2px 8px #0000000f}
+.logo-icon{font-size:24px}
+.logo-title{font-family:'DM Serif Display',serif;font-size:16px;letter-spacing:2px;color:#b34a00;line-height:1.2;font-weight:900}
+.logo-sub{font-size:9px;color:#1a5c2a;letter-spacing:2px;text-transform:uppercase;font-weight:800}
+.header-pills{display:flex;flex-direction:column;gap:4px;align-items:flex-end;flex-shrink:0}
+.pills-row{display:flex;gap:5px;align-items:center}
+.pill{border-radius:20px;padding:3px 8px;font-size:11px;font-weight:800;white-space:nowrap}
+#hdr-items{background:#fde8b0;color:#7a3e00;border:1.5px solid #e8a020}
+#hdr-entries{background:#b8e8cc;color:#0d3d1e;border:1.5px solid #2d7a4f}
+#hdr-month{background:#e8e0f8;color:#3b1fa8;border:1.5px solid #7c5cdc;cursor:pointer}
+nav::-webkit-scrollbar{display:none}
+.logo{display:flex;align-items:center;gap:8px;min-width:0;flex-shrink:1}
+.tab-btn{flex:1;min-width:60px;background:#ebe3d6;border:2px solid #bfae96;border-radius:14px;padding:10px 4px 9px;cursor:pointer;color:#4a3820;display:flex;flex-direction:column;align-items:center;gap:2px;transition:all .18s ease;box-shadow:0 2px 4px #0000000e}
+.tab-btn:active{transform:scale(0.95)}
+.tab-btn[data-tab="enter"].active{background:linear-gradient(135deg,#7c3aed,#5b21b6);border-color:#5b21b6;box-shadow:0 4px 14px #7c3aed55;color:#fff}
+.tab-btn[data-tab="database"].active{background:linear-gradient(135deg,#d97706,#b45309);border-color:#b45309;box-shadow:0 4px 14px #d9770655;color:#fff}
+.tab-btn[data-tab="log"].active{background:linear-gradient(135deg,#059669,#047857);border-color:#047857;box-shadow:0 4px 14px #05966955;color:#fff}
+.tab-btn[data-tab="import"].active{background:linear-gradient(135deg,#dc2626,#991b1b);border-color:#991b1b;box-shadow:0 4px 14px #dc262655;color:#fff}
+.tab-emoji{display:none}
+.tab-label{font-family:'DM Serif Display',serif;font-size:13px;font-weight:400;letter-spacing:1.5px;text-transform:uppercase;line-height:1.1}
+.tab-sub{font-size:7.5px;letter-spacing:0.5px;opacity:.85;font-weight:700;font-family:'DM Sans',sans-serif;text-transform:uppercase}
+.card{background:#ebe3d6;border:1px solid #bfae96;border-radius:16px;padding:20px;box-shadow:0 2px 14px #00000010;margin-bottom:14px}
+.card-header{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.card-bar{display:inline-block;width:4px;height:22px;background:#7a5010;border-radius:2px;flex-shrink:0}
+.card-title{font-family:'DM Serif Display',serif;font-size:17px;letter-spacing:2px;color:#1a1208;flex:1}
+.count-badge{background:#ece6f8;color:#4a1fa0;border-radius:20px;padding:4px 11px;font-size:11px;font-weight:700;letter-spacing:.5px;white-space:nowrap}
+.sep{border:none;border-top:1px solid #cfc4b0;margin:0 0 16px}
+.mode-row{display:flex;align-items:center;gap:8px;margin-bottom:14px;flex-wrap:wrap}
+.unit-pills{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.unit-pill{display:inline-flex;align-items:center;padding:5px 13px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;border:1.5px solid #bfae96;background:#ebe3d6;color:#4a3820;transition:all .15s;-webkit-tap-highlight-color:transparent;user-select:none}
+.unit-pill.on{background:#6b2fd4;color:#fff;border-color:#5b21b6;box-shadow:0 2px 8px #6b2fd433}
+.unit-pill:active{transform:scale(.94)}
+.mode-lbl{font-size:10px;font-weight:900;letter-spacing:2px;color:#6b5c45;text-transform:uppercase}
+.mode-btn{padding:5px 12px;border-radius:20px;border:1.5px solid #bfae96;background:none;color:#3a2c1a;font-size:12px;font-weight:600;cursor:pointer}
+.mode-btn.on{background:#ece6f8;border-color:#6b2fd4;color:#6b2fd4;font-weight:800}
+.inner-card{background:#dfd7ca;border:1.5px solid #bfae96;border-radius:14px;padding:16px;margin-bottom:12px}
+.field-lbl{font-size:10px;font-weight:900;letter-spacing:2px;color:#5a4a35;text-transform:uppercase;margin-bottom:5px;display:block}
+.inp{width:100%;background:#f5f0e8;border:1.5px solid #bfae96;border-radius:10px;padding:10px 13px;color:#1a1208;font-size:14px;font-weight:500}
+.inp-lg{width:100%;background:#f5f0e8;border:1.5px solid #bfae96;border-radius:12px;padding:12px 15px;color:#1a1208;font-size:16px;font-weight:500}
+.sel{width:100%;background:#f5f0e8;border:1.5px solid #bfae96;border-radius:10px;padding:10px 11px;color:#1a1208;font-size:14px;font-weight:500;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a6a55' stroke-width='2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-color:#f5f0e8}
+.row-grid{display:grid;grid-template-columns:1fr 1fr 54px;gap:10px;margin-bottom:12px}
+.row-grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
+.add-btn{width:52px;height:50px;background:#6b2fd4;border:none;border-radius:12px;color:#fff;font-size:28px;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 4px 14px #6b2fd455;align-self:flex-end;line-height:1}
+.add-btn:active{background:#5a25b0;transform:scale(0.96)}
+.kd-total{font-size:20px;font-weight:900;color:#1e5c3a;letter-spacing:1px;margin-top:4px}
+.info-strip{display:flex;gap:12px;padding:7px 11px;background:#c8e6d4;border-radius:8px;font-size:12px;color:#1e5c3a;margin-bottom:12px;flex-wrap:wrap;font-weight:600}
+.preview-bar{background:#d9d0c4;border:1px solid #bfae96;border-radius:8px;padding:9px 14px;font-size:13px;color:#3a2c1a;margin-top:8px;font-weight:500}
+.new-tag{display:block;margin-top:4px;font-size:11px;color:#7a5010;font-weight:700}
+/* dropdown — NEVER re-creates the input, only updates this zone */
+#sug-zone{position:absolute;left:0;right:0;top:calc(100% + 4px);z-index:500}
+.dropdown{background:#f5f0e8;border:1.5px solid #6b2fd4;border-radius:10px;list-style:none;padding:6px;max-height:220px;overflow-y:auto;box-shadow:0 8px 24px #00000020}
+.drop-item{padding:8px 11px;border-radius:8px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:8px}
+.drop-item.hi,.drop-item:hover{background:#ece6f8}
+.drop-name{font-weight:700;font-size:14px;color:#1a1208}
+.drop-name mark,.drop-meta mark{background:#d4b8f8;color:#1a1208;border-radius:2px;padding:0 1px}
+.drop-meta{font-size:11px;color:#5a4a35;font-weight:500}
+/* info zone below name input */
+#name-info{min-height:4px}
+/* qty/cost live zone */
+#kd-zone{}
+
+/* brand custom dropdown */
+#brand-drop{position:absolute;top:calc(100% + 2px);left:0;right:0;background:#f5f0e8;border:1.5px solid #6b2fd4;border-radius:10px;list-style:none;padding:4px;z-index:600;max-height:180px;overflow-y:auto;box-shadow:0 6px 20px #00000022;display:none}
+#brand-drop li{padding:7px 11px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:600;color:#1a1208}
+#brand-drop li:hover,#brand-drop li.hi{background:#ece6f8;color:#4a1fa0}
+
+
+/* ── Add/Edit Item Modal ────────────────────────────────────────────── */
+#item-modal-overlay{position:fixed;inset:0;background:#00000055;z-index:2000;display:none;align-items:flex-end;justify-content:center}
+#item-modal-overlay.open{display:flex}
+#item-modal{background:#ebe3d6;border-radius:24px 24px 0 0;width:100%;max-width:600px;max-height:92vh;overflow-y:auto;padding:24px 20px 32px;box-shadow:0 -8px 40px #00000030;animation:slideUp .22s ease}
+@keyframes slideUp{from{transform:translateY(60px);opacity:0}to{transform:translateY(0);opacity:1}}
+#item-modal .modal-title{font-family:'DM Serif Display',serif;font-size:18px;letter-spacing:2px;color:#1a1208;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+#item-modal .modal-bar{width:4px;height:22px;background:#7a5010;border-radius:2px;flex-shrink:0}
+#item-modal .modal-sep{border:none;border-top:1px solid #cfc4b0;margin:0 0 18px}
+#item-modal .m-grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+#item-modal .m-grid1{margin-bottom:14px}
+#item-modal .m-lbl{font-size:10px;font-weight:900;letter-spacing:2px;color:#5a4a35;text-transform:uppercase;margin-bottom:5px;display:block}
+#item-modal .m-lbl span{color:#c0392b}
+#item-modal .m-inp{width:100%;background:#f5f0e8;border:1.5px solid #bfae96;border-radius:10px;padding:11px 14px;color:#1a1208;font-size:15px;font-weight:500;font-family:'DM Sans',sans-serif}
+#item-modal .m-inp:focus{outline:none;border-color:#6b2fd4;box-shadow:0 0 0 3px #6b2fd422}
+#item-modal .m-sel{width:100%;background:#f5f0e8;border:1.5px solid #bfae96;border-radius:10px;padding:11px 11px;color:#1a1208;font-size:15px;font-weight:500;appearance:none;font-family:'DM Sans',sans-serif;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a6a55' stroke-width='2' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;background-color:#f5f0e8}
+#item-modal .m-sel:focus{outline:none;border-color:#6b2fd4;box-shadow:0 0 0 3px #6b2fd422}
+#item-modal .cost-calc{font-size:12px;color:#1e5c3a;font-weight:700;margin-top:5px;min-height:16px}
+#item-modal .modal-footer{display:flex;gap:10px;margin-top:6px}
+#item-modal .btn-save{flex:1;padding:14px;background:#6b2fd4;border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;box-shadow:0 4px 14px #6b2fd455}
+#item-modal .btn-save:active{background:#5a25b0}
+#item-modal .btn-cancel{padding:14px 20px;background:#dfd7ca;border:1.5px solid #bfae96;border-radius:12px;color:#5a4a35;font-size:15px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif}
+/* modal brand dropdown */
+#modal-brand-drop{position:absolute;top:calc(100% + 2px);left:0;right:0;background:#f5f0e8;border:1.5px solid #6b2fd4;border-radius:10px;list-style:none;padding:4px;z-index:2100;max-height:160px;overflow-y:auto;box-shadow:0 6px 20px #00000022;display:none}
+#modal-brand-drop li{padding:7px 11px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:600;color:#1a1208}
+#modal-brand-drop li:hover{background:#ece6f8;color:#4a1fa0}
+/* table */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:8px 11px;color:#5a4a35;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;border-bottom:1.5px solid #bfae96;white-space:nowrap;background:#d9d0c4;font-weight:700}
+td{padding:9px 11px;border-bottom:1px solid #cfc4b0;vertical-align:middle;color:#1a1208;font-weight:500}
+.name-cell{font-weight:700;color:#1a1208}
+.unit-chip{background:#ece6f8;color:#4a1fa0;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:700}
+.search-match mark{background:#ffe08a;color:#1a1208;border-radius:2px;padding:0 1px}
+.edit-btn{background:none;border:1px solid #bfae96;border-radius:6px;padding:4px 8px;color:#3a2c1a;margin-right:3px;font-size:12px;cursor:pointer}
+.del-btn{background:none;border:1px solid #cfc4b0;border-radius:6px;padding:4px 8px;color:#8b1a1e;font-size:12px;cursor:pointer}
+.save-btn{background:#c8e6d4;border:1px solid #2d6a4f;border-radius:6px;padding:4px 9px;color:#1e5c3a;font-weight:700;margin-right:3px;cursor:pointer}
+.cancel-btn{background:none;border:1px solid #bfae96;border-radius:6px;padding:4px 9px;color:#5a4a35;cursor:pointer}
+.cell-inp{background:#f5f0e8;border:1px solid #6b2fd4;border-radius:6px;padding:4px 7px;color:#1a1208;font-size:12px;font-family:'DM Sans',sans-serif}
+.io-block{margin-bottom:20px}
+.io-title{font-weight:800;font-size:15px;margin-bottom:5px;color:#1a1208}
+.io-desc{font-size:12px;color:#5a4a35;margin-bottom:11px;line-height:1.7;font-weight:500}
+.io-btn-row{display:flex;gap:10px}
+.io-btn{flex:1;padding:11px;background:#ece6f8;border:1.5px solid #6b2fd4;border-radius:10px;color:#4a1fa0;font-size:13px;font-weight:800;cursor:pointer}
+.upload-btn{display:inline-block;padding:11px 20px;background:#c8e6d4;border:1.5px solid #2d6a4f;border-radius:10px;color:#1e5c3a;font-size:13px;font-weight:800;cursor:pointer}
+.io-div{border:none;border-top:1px solid #cfc4b0;margin:18px 0}
+.sum-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.sum-card{background:#f5f0e8;border:1px solid #bfae96;border-radius:10px;padding:14px;text-align:center}
+.sum-val{font-family:'DM Serif Display',serif;font-size:28px;color:#7a5010}
+.sum-lbl{font-size:11px;color:#5a4a35;letter-spacing:.5px;margin-top:3px;font-weight:600}
+#toast{position:fixed;top:14px;right:14px;z-index:9999;padding:10px 18px;border-radius:24px;color:#fff;font-weight:700;font-size:13px;box-shadow:0 4px 20px #0004;display:none;max-width:260px;word-break:break-word}
+.empty{text-align:center;color:#6b5c45;padding:36px 0;font-size:14px;font-weight:500}
+.small-purple-btn{padding:6px 13px;background:#ece6f8;border:1.5px solid #6b2fd4;border-radius:20px;color:#4a1fa0;font-size:12px;font-weight:800;cursor:pointer}
+.install-bar{background:#6b2fd4;color:#fff;text-align:center;padding:10px 16px;font-size:13px;font-weight:700;display:none;align-items:center;justify-content:space-between;gap:10px}
+.install-bar button{background:#fff;color:#6b2fd4;border:none;border-radius:20px;padding:5px 14px;font-weight:800;font-size:12px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="toast"></div>
+  <div class="install-bar" id="install-bar">
+    <span>📲 Add to Home Screen for offline use</span>
+    <button id="install-btn">Install</button>
+  </div>
+  <header>
+    <div class="logo">
+      <span class="logo-icon">🍽</span>
+      <div>
+        <div class="logo-title">CHEF SANTOSH</div>
+        <div class="logo-sub">Inventory System &nbsp;·&nbsp; V108.15</div>
+      </div>
+    </div>
+    <div class="header-pills">
+      <div class="pills-row">
+        <span class="pill" id="hdr-items">10 items</span>
+        <span class="pill" id="hdr-entries">0 entries</span>
+      </div>
+      <div class="pills-row">
+        <span class="pill" id="hdr-month" onclick="openMonthPicker()">📅 …</span>
+        <select id="currency-sel" style="background:#ebe3d6;border:1.5px solid #bfae96;border-radius:20px;padding:3px 8px;font-size:11px;font-weight:800;color:#4a3820;cursor:pointer;appearance:none;-webkit-appearance:none">
+          <option value="KD">KD</option>
+          <option value="USD">USD $</option>
+          <option value="AED">AED</option>
+          <option value="INR">INR ₹</option>
+          <option value="EUR">EUR €</option>
+          <option value="GBP">GBP £</option>
+        </select>
+      </div>
+    </div>
+  </header>
+  <main id="main-content"></main>
+  <nav id="main-nav">
+    <button class="tab-btn active" data-tab="enter"><span class="tab-emoji">📥</span><span class="tab-label">ENTER</span><span class="tab-sub">Inventory</span></button>
+    <button class="tab-btn" data-tab="database"><span class="tab-emoji">🗄</span><span class="tab-label">DATABASE</span><span class="tab-sub">Items</span></button>
+    <button class="tab-btn" data-tab="log"><span class="tab-emoji">📋</span><span class="tab-label">LOG</span><span class="tab-sub">History</span></button>
+    <button class="tab-btn" data-tab="import"><span class="tab-emoji">📂</span><span class="tab-label">IMPORT</span><span class="tab-sub">Export</span></button>
+  </nav>
+
+<!-- ── Add / Edit Item Modal ─────────────────────────────────────── -->
+<div id="item-modal-overlay">
+  <div id="item-modal">
+    <div class="modal-title"><span class="modal-bar"></span><span id="modal-heading">ADD / UPDATE INGREDIENT</span></div>
+    <hr class="modal-sep"/>
+
+    <div class="m-grid1">
+      <label class="m-lbl">NAME <span>*</span></label>
+      <input id="m-name" class="m-inp" type="text" placeholder="Ingredient name"
+        autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"/>
+    </div>
+
+    <div class="m-grid2">
+      <div>
+        <label class="m-lbl">UNIT</label>
+        <select id="m-unit" class="m-sel">
+          <option value="gm">gm</option>
+          <option value="ml">ml</option>
+          <option value="pcs">pcs</option>
+          <option value="kg">kg</option>
+          <option value="ltr">ltr</option>
+        </select>
+      </div>
+      <div>
+        <label class="m-lbl" id="m-cost-lbl">COST PER UNIT (KD)</label>
+        <input id="m-ppu" class="m-inp" type="number" min="0" step="any" inputmode="decimal" placeholder="0.000"/>
+        <div class="cost-calc" id="m-cost-calc"></div>
+      </div>
+    </div>
+
+    <div class="m-grid2">
+      <div>
+        <label class="m-lbl">PACK QTY <span style="font-size:9px;letter-spacing:0;text-transform:none;color:#7a6a55">(g/ml per pack)</span></label>
+        <input id="m-packqty" class="m-inp" type="number" min="0" step="any" inputmode="decimal" placeholder="e.g. 1000"/>
+      </div>
+      <div>
+        <label class="m-lbl">PACK PRICE (KD)</label>
+        <input id="m-packprice" class="m-inp" type="number" min="0" step="any" inputmode="decimal" placeholder="e.g. 2.500"/>
+      </div>
+    </div>
+
+    <div class="m-grid2">
+      <div>
+        <label class="m-lbl">STOCK QTY <span style="font-size:9px;letter-spacing:0;text-transform:none;color:#7a6a55">(current month)</span></label>
+        <input id="m-cm" class="m-inp" type="number" min="0" step="any" inputmode="decimal" placeholder="0"/>
+      </div>
+      <div>
+        <label class="m-lbl">LAST MONTH QTY</label>
+        <input id="m-lm" class="m-inp" type="number" min="0" step="any" inputmode="decimal" placeholder="0"/>
+      </div>
+    </div>
+
+    <div class="m-grid2">
+      <div style="position:relative">
+        <label class="m-lbl">BRAND</label>
+        <input id="m-brand" class="m-inp" type="text" placeholder="Brand (opt.)"
+          autocomplete="off" autocorrect="off" spellcheck="false"/>
+        <ul id="modal-brand-drop"></ul>
+      </div>
+      <div>
+        <label class="m-lbl">SUPPLIER</label>
+        <input id="m-supplier" class="m-inp" type="text" placeholder="Supplier (opt.)"
+          autocomplete="off" autocorrect="off" spellcheck="false"/>
+      </div>
+    </div>
+
+    <div class="m-grid1">
+      <label class="m-lbl">SHEET / CATEGORY</label>
+      <select id="m-sheet" class="m-sel">
+        <option value="">— No Category —</option>
+        <option value="STICKER">STICKER</option>
+        <option value="STICKERS NEW">STICKERS NEW</option>
+        <option value="CONSUMABLE ITEMS">CONSUMABLE</option>
+        <option value="FOOD ITEMS">FOOD</option>
+        <option value="TEA PRODUCT">TEA</option>
+        <option value="FOOD SUPPLEMENTS">SUPPLEMENTS</option>
+        <option value="HERBAL &amp; BOTANICAL">HERBAL &amp; BOTANICAL</option>
+        <option value="FRUIT AND VEGETABLES">FRUIT &amp; VEG</option>
+        <option value="FROZEN Items">FROZEN</option>
+        <option value="FNISH PRODUCT">FINISH</option>
+        <option value="RETAIL PRODUCTS">RETAIL</option>
+        <option value="__new__">✦ Create new category…</option>
+      </select>
+      <div id="m-sheet-new-wrap" style="display:none;margin-top:8px">
+        <input id="m-sheet-new" class="m-inp" type="text" placeholder="New category name (e.g. SAUCES)"
+          autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"/>
+        <div style="font-size:10px;color:#6b5c45;margin-top:4px;font-weight:600">This will be available as a sheet filter in the database.</div>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn-cancel" id="modal-cancel-btn">Cancel</button>
+      <button class="btn-save" id="modal-save-btn">💾 Save Item</button>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+// ═══════════════════════════════════════════════════════
+// CONSTANTS & DATA
+// ═══════════════════════════════════════════════════════
+const PACK_SIZES={
+  gm:[
+    {l:"142g (5oz)",v:142},
+    {l:"227g (8oz)",v:227},
+    {l:"250g",v:250},
+    {l:"340g (12oz)",v:340},
+    {l:"368g (13oz)",v:368},
+    {l:"397g (14oz)",v:397},
+    {l:"453g (1lb)",v:453},
+    {l:"454g (1lb)",v:454},
+    {l:"500g",v:500},
+    {l:"510g (18oz)",v:510},
+    {l:"567g (20oz)",v:567},
+    {l:"623g (22oz)",v:623},
+    {l:"624g (22oz)",v:624},
+    {l:"680g (1.5lb)",v:680},
+    {l:"794g (28oz)",v:794},
+    {l:"907g (2lb)",v:907},
+    {l:"1kg",v:1000},
+    {l:"2kg",v:2000},
+    {l:"5kg",v:5000}
+  ],
+  ml:[{l:"250ml",v:250},{l:"500ml",v:500},{l:"1L",v:1000},{l:"2L",v:2000}],
+  pcs:[{l:"Pack of 6",v:6},{l:"Pack of 12",v:12},{l:"Pack of 24",v:24}],
+  kg:[{l:"1kg",v:1},{l:"5kg",v:5},{l:"10kg",v:10}],
+  ltr:[{l:"1L",v:1},{l:"2L",v:2},{l:"5L",v:5}]
+};
+const UNITS=["gm","ml","pcs","kg","ltr","oz","lb"];
+
+// oz → gm conversion map
+const OZ_TO_GM={
+  5:142, 8:227, 10:283, 12:340, 13:368, 14:397,
+  16:453, 18:510, 20:567, 22:624, 24:680, 28:794, 32:907, 48:1361, 64:1814
+};
+// Pack size presets — gm and oz shown together
+function getPackSizeOpts(unit){
+  const gmSizes=[142,227,250,340,368,397,453,454,500,510,567,624,680,794,907,1000,2000,5000];
+  const ozSizes=Object.entries(OZ_TO_GM).map(([oz,gm])=>({oz:Number(oz),gm}));
+  return {gmSizes, ozSizes};
+}
+// Returns the best-match pack size value (gm) or null if no match
+const SMART_PACK_MAP=[
+  // 142g
+  {v:142, keys:["nutritional yeast","large flake"]},
+  // 227g
+  {v:227, keys:["xanthan","guar gum"]},
+  // 340g
+  {v:340, keys:["hemp heart","protein powder","almond meal"]},
+  // 368g
+  {v:368, keys:["golden flax","flaxseed"]},
+  // 397g
+  {v:397, keys:["pancake mix","protein pancake"]},
+  // 454g / 453g — most common 1lb items
+  {v:454, keys:["chickpea flour","arrowroot","buckwheat groat","almond flour","chia seed","wheat bran","coconut flour","arrowroot starch"]},
+  // 510g
+  {v:510, keys:["corn starch","cornstarch"]},
+  // 567g
+  {v:567, keys:["millet flour","cassava flour","dark rye","oat flour"]},
+  // 623g / 624g — 22oz (Bob's Red Mill standard bag)
+  {v:624, keys:["1 to 1","1-to-1","one to one","buckwheat flour","potato starch","baking flour","all purpose flour","all-purpose flour","plain flour"]},
+  // 680g
+  {v:680, keys:["steel cut oat","masa harina","organic masa"]},
+  // 794g
+  {v:794, keys:["quick rolled oat","rolled oat","quick oat"]},
+  // 907g — 2lb bulk only
+  {v:907, keys:["bread flour","whole wheat flour","whole grain flour"]},
+  // 500g defaults for common spices/powders
+  {v:500, keys:["all spice","allspice","cinnamon","turmeric","paprika","cumin","coriander","cardamom","ginger powder","garlic powder","onion powder","black pepper","white pepper"]},
+  // 250g for small items
+  {v:250, keys:["saffron","vanilla powder","truffle","sumac","za'atar","matcha","spirulina"]}
+];
+
+function smartPackSize(name){
+  if(!name) return null;
+  const n=name.toLowerCase();
+  for(const rule of SMART_PACK_MAP){
+    if(rule.keys.some(k=>n.includes(k))) return rule.v;
+  }
+  return null;
+}
+
+function getDefaultDb(){
+  return [
+    {id:"1", name:"Agar Agar",        unit:"gm",brand:"Bob's Red Mill",ppu:0.063, lm:500, cm:0},
+    {id:"2", name:"All Purpose Flour",unit:"gm",brand:"Bob's Red Mill",ppu:0.0031,lm:2000,cm:0},
+    {id:"3", name:"Almond",           unit:"gm",brand:"Natureland",    ppu:0.0035,lm:800, cm:0},
+    {id:"4", name:"Almond Butter",    unit:"gm",brand:"Natureland",    ppu:0.017, lm:300, cm:0},
+    {id:"5", name:"All Spice",        unit:"gm",brand:"Natureland",    ppu:0.0603,lm:150, cm:0},
+    {id:"6", name:"Acerola Juice",    unit:"ml",brand:"Bob's Red Mill",ppu:0.0048,lm:1000,cm:0},
+    {id:"7", name:"1 To 1 Flour",     unit:"gm",brand:"Bob's Red Mill",ppu:0.0032,lm:1500,cm:0},
+    {id:"8", name:"Butter",           unit:"gm",brand:"Home Made",     ppu:0.005, lm:600, cm:0},
+    {id:"9", name:"Cream Cheese",     unit:"gm",brand:"Natureland",    ppu:0.012, lm:400, cm:0},
+    {id:"10",name:"Sugar",            unit:"gm",brand:"Home Made",     ppu:0.002, lm:3000,cm:0}
+  ];
+}
+let db=getDefaultDb();
+let logEntries=[];
+
+// ═══════════════════════════════════════════════════════
+// STATE
+// ═══════════════════════════════════════════════════════
+const CURRENCIES={
+  KD: {symbol:"KD",  name:"Kuwaiti Dinar",  decimals:3},
+  USD:{symbol:"$",   name:"US Dollar",       decimals:2},
+  AED:{symbol:"AED", name:"UAE Dirham",      decimals:2},
+  INR:{symbol:"₹",   name:"Indian Rupee",    decimals:2},
+  EUR:{symbol:"€",   name:"Euro",            decimals:2},
+  GBP:{symbol:"£",   name:"British Pound",   decimals:2},
+};
+function currency(){ return CURRENCIES[S.currency]||CURRENCIES.KD; }
+function fmtCost(val){ const c=currency(); return c.symbol+" "+(val||0).toFixed(c.decimals); }
+
+const S={
+  tab:"enter",
+  unitMode:"direct",
+  itemName:"",qty:"",packSize:500,packCount:"",
+  showSug:false,activeIdx:-1,
+  dbSearch:"",editRowId:null,
+  dbHideZero:false,
+  dbCategory:"",
+  activeSheet:"",
+  directUnit:"gm",
+  currency:"KD",
+  logView:"grouped",logEditId:null,
+  workingMonth:""
+};
+// dbSelectedIds is a Set — kept separate from S to avoid JSON issues
+let _dbSelectedIds=new Set();
+// Hidden categories — persisted separately (Set doesn't JSON well)
+let _hiddenCats=new Set();
+
+// ═══════════════════════════════════════════════════════
+// UTILS
+// ═══════════════════════════════════════════════════════
+let _idc=0;
+function uid(){ return String(Date.now())+"_"+String(++_idc)+"_"+Math.random().toString(36).slice(2,6); }
+function fmt(n){ return (n||0).toLocaleString(undefined,{maximumFractionDigits:1}); }
+function esc(s){ if(s===undefined||s===null) return ""; return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function $id(id){ return document.getElementById(id); }
+
+let _tt;
+function toast(msg,type){
+  const t=$id("toast");
+  t.textContent=msg; t.style.background=type==="err"?"#8b1a1e":"#1e5c3a"; t.style.display="block";
+  clearTimeout(_tt); _tt=setTimeout(()=>t.style.display="none",2800);
+}
+
+// ═══════════════════════════════════════════════════════
+// SCROLL-SAFE TAP DETECTION
+// Tracks touchstart + touchmove. touchend calls isTap()
+// to check if finger moved — if so it was a scroll.
+// Prevents dropdown items from being selected while scrolling.
+// ═══════════════════════════════════════════════════════
+let _touchStartX=0, _touchStartY=0, _touchMoved=false;
+document.addEventListener("touchstart",function(e){
+  if(e.touches[0]){
+    _touchStartX=e.touches[0].clientX;
+    _touchStartY=e.touches[0].clientY;
+    _touchMoved=false;
+  }
+},{passive:true});
+document.addEventListener("touchmove",function(e){
+  if(e.touches[0]){
+    const dx=Math.abs(e.touches[0].clientX-_touchStartX);
+    const dy=Math.abs(e.touches[0].clientY-_touchStartY);
+    if(dx>6||dy>6) _touchMoved=true;
+  }
+},{passive:true});
+function isTap(e){
+  if(_touchMoved) return false;
+  if(!e.changedTouches||!e.changedTouches[0]) return true;
+  const dx=Math.abs(e.changedTouches[0].clientX-_touchStartX);
+  const dy=Math.abs(e.changedTouches[0].clientY-_touchStartY);
+  return dx<12&&dy<12;
+}
+// ═══════════════════════════════════════════════════════
+// Brand values that are sheet-level defaults, not real brands
+const FAKE_BRANDS=/^(finish\s*product|ready\s*product|veg\.?\s*[&]\s*fruit|bulk\s*prod|stickers?\s*new)$/i;
+
+function saveData(){
+  invalidateCache();
+  try{
+    localStorage.setItem("cs_db",JSON.stringify(db));
+    localStorage.setItem("cs_log",JSON.stringify(logEntries));
+    if(S.workingMonth) localStorage.setItem("cs_workingMonth",S.workingMonth);
+    else localStorage.removeItem("cs_workingMonth");
+    // Save UI state so app restores to same tab/category after minimize
+    localStorage.setItem("cs_state",JSON.stringify({
+      tab:S.tab,
+      dbCategory:S.dbCategory,
+      currency:S.currency,
+      dbHideZero:S.dbHideZero,
+      unitMode:S.unitMode,
+      directUnit:S.directUnit,
+      hiddenCats:[..._hiddenCats]
+    }));
+  }catch(e){}
+}
+function loadData(){
+  try{
+    const d=localStorage.getItem("cs_db"), l=localStorage.getItem("cs_log");
+    if(d){ const p=JSON.parse(d); if(Array.isArray(p)&&p.length) db=p; }
+    if(l){ const p=JSON.parse(l); if(Array.isArray(p)) logEntries=p; }
+    const wm=localStorage.getItem("cs_workingMonth");
+    if(wm) S.workingMonth=wm;
+    // Restore UI state
+    const st=localStorage.getItem("cs_state");
+    if(st){
+      const ps=JSON.parse(st);
+      if(ps.tab) S.tab=ps.tab;
+      if(ps.dbCategory) S.dbCategory=ps.dbCategory;
+      if(ps.currency) S.currency=ps.currency;
+      if(ps.dbHideZero!=null) S.dbHideZero=ps.dbHideZero;
+      if(ps.unitMode) S.unitMode=ps.unitMode;
+      if(ps.directUnit) S.directUnit=ps.directUnit;
+      if(Array.isArray(ps.hiddenCats)) _hiddenCats=new Set(ps.hiddenCats);
+    }
+  }catch(e){ console.warn("loadData failed:",e); }
+  // Fix: strip brand values that are sheet-level defaults, not real brands
+  // STICKER and TAG are kept — they are real brands for sticker items
+  db.forEach(function(item){
+    if(item.brand && item.brand!=="—"){
+      if(FAKE_BRANDS.test(item.brand)) item.brand="—";
+      else if(item.sourceSheet && item.brand.toLowerCase()===item.sourceSheet.toLowerCase()) item.brand="—";
+    }
+  });
+  invalidateCache();
+}
+
+// Cached grouped log — invalidated on saveData
+let _groupedLogCache=null;
+function getGroupedLog(){
+  if(_groupedLogCache) return _groupedLogCache;
+  const byItem={};
+  const ordered=[...logEntries].reverse();
+  const groups=[];
+  ordered.forEach(function(e){
+    if(!e||!e.name) return; // skip corrupted entries
+    let eDate=new Date(e.ts);
+    if(isNaN(eDate.getTime())) eDate=new Date(); // fallback: treat as now
+    const display=e.tsDisplay||e.ts;
+    // Key = name + sheet so same-name items from different sheets stay separate
+    const dbItem=db.find(d=>d.name.toLowerCase()===e.name.toLowerCase()&&
+      (!e.sourceSheet||(d.sourceSheet||"").toLowerCase()===(e.sourceSheet||"").toLowerCase()));
+    const sheet=e.sourceSheet||(dbItem?dbItem.sourceSheet:"")||"";
+    const key=(e.name.toLowerCase())+"||"+(sheet.toLowerCase());
+    if(!byItem[key]){
+      const g={id:e.id,name:e.name,unit:e.unit,amount:e.amount,
+               mode:e.mode,packSize:e.packSize,packCount:e.packCount,
+               firstDisplay:display,lastDisplay:display,_date:eDate,count:1};
+      byItem[key]=g; groups.push(g);
+    } else {
+      const g=byItem[key];
+      const gapDays=Math.abs(eDate-g._date)/(1000*60*60*24);
+      if(gapDays>=5){
+        const ng={id:e.id,name:e.name,unit:e.unit,amount:e.amount,
+                  mode:e.mode,packSize:e.packSize,packCount:e.packCount,
+                  firstDisplay:display,lastDisplay:display,_date:eDate,count:1};
+        byItem[key]=ng; groups.push(ng);
+      } else {
+        g.amount+=e.amount; g.lastDisplay=display; g._date=eDate; g.count++;
+        if(e.packCount) g.packCount=(parseFloat(g.packCount||0)+parseFloat(e.packCount||0));
+      }
+    }
+  });
+  _groupedLogCache=groups.reverse();
+  return _groupedLogCache;
+}
+// Call this whenever logEntries or db changes
+function invalidateCache(){ _groupedLogCache=null; }
+
+function updateMonthPill(){
+  const el=document.getElementById("hdr-month");
+  if(!el) return;
+  const calMonth=new Date().toLocaleString('default',{month:'long',year:'numeric'});
+  const wm=S.workingMonth||calMonth;
+  const isOff=S.workingMonth && S.workingMonth!==calMonth;
+  const shortMonth=wm.split(" ")[0];
+  el.textContent="📅 "+shortMonth;
+  // Amber override when not current calendar month, else revert to CSS default
+  el.style.background=isOff?"#fef3c7":"";
+  el.style.color=isOff?"#92400e":"";
+  el.style.borderColor=isOff?"#f59e0b":"";
+  el.title="Working month: "+wm+(isOff?" (different from current calendar month — tap to change)":"")+" — tap to change";
+}
+
+function openMonthPicker(){
+  const calMonth=new Date().toLocaleString('default',{month:'long',year:'numeric'});
+  const current=S.workingMonth||calMonth;
+  // Build last 6 months + next 2 months as options
+  const opts=[];
+  const now=new Date(); now.setDate(1);
+  for(let i=-5;i<=2;i++){
+    const d=new Date(now.getFullYear(),now.getMonth()+i,1);
+    opts.push(d.toLocaleString('default',{month:'long',year:'numeric'}));
+  }
+  // Show a simple modal
+  const existing=document.getElementById("month-picker-overlay");
+  if(existing) existing.remove();
+  const ov=document.createElement("div");
+  ov.id="month-picker-overlay";
+  ov.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:center;justify-content:center";
+  ov.innerHTML=`<div style="background:#faf6f0;border-radius:18px;padding:20px;min-width:260px;max-width:90vw;box-shadow:0 8px 32px rgba(0,0,0,.2)">
+    <div style="font-weight:800;font-size:15px;color:#1a1208;margin-bottom:4px">📅 Working Month</div>
+    <div style="font-size:12px;color:#6b5c45;margin-bottom:14px">Entries will be logged under this month's inventory.</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      ${opts.map(m=>`<button onclick="setWorkingMonth('${m}')" style="padding:10px 14px;border-radius:10px;border:2px solid ${m===current?'#5b21b6':'#d4cbbf'};background:${m===current?'#ede9fe':'#fff'};color:${m===current?'#5b21b6':'#1a1208'};font-weight:700;font-size:13px;text-align:left;cursor:pointer">${m===calMonth?'📍 '+m+' (current)':m}</button>`).join("")}
+    </div>
+    <button onclick="document.getElementById('month-picker-overlay').remove()" style="margin-top:14px;width:100%;padding:10px;border-radius:10px;border:none;background:#e8e0d4;color:#4a3820;font-weight:700;font-size:13px;cursor:pointer">Cancel</button>
+  </div>`;
+  ov.addEventListener("click",function(e){ if(e.target===ov) ov.remove(); });
+  document.body.appendChild(ov);
+}
+
+function setWorkingMonth(m){
+  const calMonth=new Date().toLocaleString('default',{month:'long',year:'numeric'});
+  S.workingMonth=(m===calMonth)?"":m;
+  saveData();
+  updateMonthPill();
+  document.getElementById("month-picker-overlay")?.remove();
+  if(S.tab==="enter") mountTab();
+  else if(S.tab==="database") rebuildDb();
+  toast("Working month: "+(S.workingMonth||calMonth));
+}
+
+function openHiddenCatsPanel(){
+  const allCats=[...new Set(db.map(d=>d.sourceSheet).filter(Boolean))].sort();
+  const existing=document.getElementById("hidden-cats-overlay");
+  if(existing) existing.remove();
+  const ov=document.createElement("div");
+  ov.id="hidden-cats-overlay";
+  ov.style.cssText="position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:9999;display:flex;align-items:flex-end;justify-content:center";
+  ov.innerHTML=`<div style="background:#faf6f0;border-radius:24px 24px 0 0;width:100%;max-width:600px;max-height:80vh;overflow-y:auto;padding:22px 20px 32px;box-shadow:0 -8px 40px rgba(0,0,0,.2)">
+    <div style="font-family:'DM Serif Display',serif;font-size:17px;letter-spacing:2px;color:#1a1208;margin-bottom:4px">👁 Manage Visible Categories</div>
+    <div style="font-size:12px;color:#6b5c45;margin-bottom:16px">Hidden categories are excluded from the database view and item count. Tap any category to toggle.</div>
+    <div style="display:flex;flex-direction:column;gap:8px" id="hc-list">
+      ${allCats.map(cat=>{
+        const c=SHEET_COLORS[cat]||{bg:"#f3f4f6",color:"#374151",label:cat};
+        const cnt=db.filter(d=>d.sourceSheet===cat).length;
+        const hidden=_hiddenCats.has(cat);
+        return `<div class="hc-row" data-cat="${esc(cat)}" style="display:flex;align-items:center;justify-content:space-between;padding:11px 14px;border-radius:12px;border:2px solid ${hidden?'#cfc4b0':'#d4cbbf'};background:${hidden?'#f5f0e8':'#fff'};cursor:pointer;opacity:${hidden?0.5:1};transition:all .15s">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="width:12px;height:12px;border-radius:50%;background:${c.color};display:inline-block;flex-shrink:0"></span>
+            <span style="font-weight:700;font-size:14px;color:#1a1208">${esc(c.label)}</span>
+            <span style="font-size:11px;color:#6b5c45">${cnt} items</span>
+          </div>
+          <span style="font-size:18px">${hidden?'🙈':'👁'}</span>
+        </div>`;
+      }).join("")}
+    </div>
+    ${_hiddenCats.size>0?`<button id="hc-show-all-btn" style="margin-top:14px;width:100%;padding:10px;border-radius:10px;border:1.5px solid #6b2fd4;background:#ece6f8;color:#4a1fa0;font-weight:700;font-size:13px;cursor:pointer">👁 Show All Categories</button>`:""}
+    <button id="hc-done-btn" style="margin-top:8px;width:100%;padding:10px;border-radius:10px;border:none;background:#e8e0d4;color:#4a3820;font-weight:700;font-size:13px;cursor:pointer">Done</button>
+  </div>`;
+  // Event delegation — avoids inline onclick with escaped strings
+  ov.addEventListener("click",function(e){
+    if(e.target===ov){ ov.remove(); rebuildDb(); return; }
+    const row=e.target.closest(".hc-row");
+    if(row){ toggleHiddenCat(row.dataset.cat, row); return; }
+    if(e.target.id==="hc-show-all-btn"){ clearAllHidden(); return; }
+    if(e.target.id==="hc-done-btn"){ ov.remove(); rebuildDb(); return; }
+  });
+  document.body.appendChild(ov);
+}
+
+function toggleHiddenCat(cat, el){
+  if(_hiddenCats.has(cat)){
+    _hiddenCats.delete(cat);
+    el.style.opacity="1";
+    el.style.border="2px solid #d4cbbf";
+    el.style.background="#fff";
+    el.querySelector("span:last-child").textContent="👁";
+  } else {
+    _hiddenCats.add(cat);
+    el.style.opacity="0.5";
+    el.style.border="2px solid #cfc4b0";
+    el.style.background="#f5f0e8";
+    el.querySelector("span:last-child").textContent="🙈";
+    // If currently viewing this hidden category, reset to All
+    if(S.dbCategory===cat) S.dbCategory="";
+  }
+  saveData();
+  updatePills();
+  // Refresh the "show all" button in the panel
+  const ov=document.getElementById("hidden-cats-overlay");
+  if(ov){
+    const existing=ov.querySelector("#hc-show-all-btn");
+    const doneBtn=ov.querySelector("#hc-done-btn");
+    if(_hiddenCats.size>0&&!existing&&doneBtn){
+      const btn=document.createElement("button");
+      btn.id="hc-show-all-btn";
+      btn.style.cssText="margin-top:14px;width:100%;padding:10px;border-radius:10px;border:1.5px solid #6b2fd4;background:#ece6f8;color:#4a1fa0;font-weight:700;font-size:13px;cursor:pointer";
+      btn.textContent="👁 Show All Categories";
+      doneBtn.parentNode.insertBefore(btn,doneBtn);
+    } else if(_hiddenCats.size===0&&existing){ existing.remove(); }
+  }
+}
+
+function clearAllHidden(){
+  _hiddenCats.clear();
+  saveData(); updatePills();
+  document.getElementById("hidden-cats-overlay")?.remove();
+  rebuildDb();
+  toast("All categories visible ✓");
+}
+
+function updatePills(){
+  const hi=$id("hdr-items"), he=$id("hdr-entries");
+  const visibleDb=db.filter(d=>!_hiddenCats.has(d.sourceSheet||""));
+  if(hi){
+    hi.textContent=visibleDb.length+(db.length>visibleDb.length?" items*":" items");
+    hi.title=_hiddenCats.size>0?`${db.length} total — ${db.length-visibleDb.length} hidden in ${_hiddenCats.size} category(ies)`:"";
+  }
+  const grouped=getGroupedLog();
+  if(he) he.textContent=grouped.length+" entries";
+  updateMonthPill();
+}
+
+// ═══════════════════════════════════════════════════════
+// SEARCH
+// ═══════════════════════════════════════════════════════
+function score(text,q){
+  if(!text||!q) return {s:0,h:esc(text||"")};
+  const t=text.toLowerCase(),ql=q.toLowerCase();
+  if(t===ql) return {s:200,h:"<mark>"+esc(text)+"</mark>"};
+  if(t.startsWith(ql)) return {s:100+Math.max(0,50-text.length),h:"<mark>"+esc(text.slice(0,ql.length))+"</mark>"+esc(text.slice(ql.length))};
+  const ci=t.indexOf(ql);
+  if(ci>=0) return {s:70+Math.max(0,50-ci),h:esc(text.slice(0,ci))+"<mark>"+esc(text.slice(ci,ci+ql.length))+"</mark>"+esc(text.slice(ci+ql.length))};
+  const ws=t.split(/\s+/),qws=ql.split(/\s+/);
+  if(qws.every(w=>ws.some(v=>v.startsWith(w)))) return {s:50,h:esc(text)};
+  let qi=0,pos=[];
+  for(let i=0;i<t.length&&qi<ql.length;i++) if(t[i]===ql[qi]){pos.push(i);qi++;}
+  if(qi===ql.length){
+    let o="",ps=new Set(pos);
+    for(let i=0;i<text.length;i++) o+=ps.has(i)?"<mark>"+esc(text[i])+"</mark>":esc(text[i]);
+    return {s:15+pos.length,h:o};
+  }
+  return {s:0,h:esc(text)};
+}
+
+function getSugs(q){
+  if(!q||!q.trim()) return [];
+  return db.map(item=>{
+    const ns=score(item.name,q);
+    const brandStr=item.brand&&item.brand!=="—"?item.brand:"";
+    const bs=brandStr?score(brandStr,q):{s:0,h:""};
+    return {item,sc:Math.max(ns.s,bs.s),nh:ns.h,bh:bs.h||esc(item.brand||"—")};
+  }).filter(r=>r.sc>0).sort((a,b)=>b.sc-a.sc).slice(0,12);
+}
+
+function filterDb(q){
+  if(!q||!q.trim()) return db.map(item=>({item,nh:esc(item.name),bh:esc(item.brand||"—")}));
+  return db.map(item=>{
+    const ns=score(item.name,q);
+    const brandStr=item.brand&&item.brand!=="—"?item.brand:"";
+    const bs=brandStr?score(brandStr,q):{s:0,h:""};
+    return {item,sc:Math.max(ns.s,bs.s),nh:ns.h,bh:bs.h||esc(item.brand||"—")};
+  }).filter(r=>r.sc>0).sort((a,b)=>b.sc-a.sc);
+}
+
+// ═══════════════════════════════════════════════════════
+// HELPERS
+// ═══════════════════════════════════════════════════════
+function selItem(){
+  const n=S.itemName.trim().toLowerCase();
+  if(!n) return null;
+  // If we know the active sheet (picked from suggestion), match on both
+  if(S.activeSheet){
+    const exact=db.find(d=>d.name.toLowerCase()===n&&(d.sourceSheet||"").toLowerCase()===S.activeSheet.toLowerCase());
+    if(exact) return exact;
+  }
+  // Fallback: first name match
+  return db.find(d=>d.name.toLowerCase()===n)||null;
+}
+function calcAmt(){
+  if(S.unitMode==="pack"){
+    return safeEval(S.packCount)*parseFloat(S.packSize||0);
+  }
+  const raw=safeEval(S.qty);
+  // oz pill selected → convert to gm for storage
+  if(S.directUnit==="oz"&&!isNaN(raw)&&raw>0){
+    return parseFloat((raw*28.3495).toFixed(4));
+  }
+  return raw;
+}
+
+
+// ── Month name helpers ──────────────────────────────────────────────────────
+function currentMonthName(){
+  if(S.workingMonth) return S.workingMonth;
+  return new Date().toLocaleString('default',{month:'long',year:'numeric'});
+}
+function lastMonthName(){
+  // Derive last month from workingMonth if set, else from calendar
+  let d;
+  if(S.workingMonth){
+    // Parse "June 2026" → Date
+    d=new Date(S.workingMonth+" 1");
+    if(isNaN(d.getTime())) d=new Date();
+  } else {
+    d=new Date();
+  }
+  d.setDate(1); d.setMonth(d.getMonth()-1);
+  return d.toLocaleString('default',{month:'long',year:'numeric'});
+}
+// ── Calculator eval ──────────────────────────────────────
+// Safely evaluates expressions like "454*5", "500+250-50", "1000/4"
+// Only allows digits, spaces, and + - * / . ( )
+// Returns the numeric result, or NaN if invalid
+function safeEval(expr){
+  if(expr===undefined||expr===null) return 0;
+  let s=String(expr).trim();
+  if(!s) return 0;
+  // Normalize mobile keyboard symbols → standard operators
+  s=s.replace(/×/g,"*").replace(/÷/g,"/").replace(/−/g,"-").replace(/，/g,"");
+  // Fix leading dot: .875 → 0.875, also inside expressions like 2*.5
+  s=s.replace(/(^|[+\-*/\(])(\.\d)/g,"$10$2");
+  // Pure number — fast path
+  if(/^[\d.]+$/.test(s)) return parseFloat(s)||0;
+  // Expression — only allow safe characters
+  if(!/^[\d\s\+\-\*\/\.\(\)]+$/.test(s)) return NaN;
+  try{
+    const result=Function('"use strict";return ('+s+')')();
+    if(typeof result!=="number"||!isFinite(result)||result<0) return NaN;
+    return parseFloat(result.toFixed(6));
+  }catch(x){ return NaN; }
+}
+
+// Module-level focus-routing flags
+let _pickSugJump=false;
+let _qtyToNameFlag=false; // qty blur submitted → name focus is expected
+
+// ═══════════════════════════════════════════════════════
+// TAB NAVIGATION — wired once
+// ═══════════════════════════════════════════════════════
+$id("main-nav").addEventListener("click",function(e){
+  const btn=e.target.closest(".tab-btn");
+  if(!btn||btn.dataset.tab===S.tab) return;
+  S.showSug=false; S.editRowId=null; S.tab=btn.dataset.tab;
+  saveData(); // persist tab selection
+  wireDb._twWired=false; wireDb._cardWired=false; wireLog._wired=false;
+  document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active",b.dataset.tab===S.tab));
+  mountTab();
+});
+
+// ═══════════════════════════════════════════════════════
+// MOUNT — full re-render only on tab switch
+// ═══════════════════════════════════════════════════════
+function mountTab(){
+  const mc=$id("main-content");
+  if(S.tab==="enter")         { mc.innerHTML=buildEnter();    wireEnter(); }
+  else if(S.tab==="database") { mc.innerHTML=buildDb();       wireDb(); }
+  else if(S.tab==="log")      { mc.innerHTML=buildLog(); wireLog(); }
+  else                        { mc.innerHTML=buildImport();   wireImport(); }
+  updatePills();
+}
+
+// ═══════════════════════════════════════════════════════
+// ══ ENTER TAB ═══════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+function buildEnter(){
+  const sel=selItem();
+  const curUnit=sel?sel.unit:(S.directUnit||"gm");
+
+  // Pack mode: total gm = packCount × packSize
+  const packTotal=S.unitMode==="pack"? safeEval(S.packCount)*S.packSize : 0;
+  const packTotalFmt=(!isNaN(packTotal)&&packTotal>0)?fmt(packTotal)+" "+(sel?sel.unit:"gm"):"—";
+
+  const amt=calcAmt();
+  const costVal=amt*(sel?sel.ppu:0);
+  const cost=fmtCost(costVal);
+
+  const packLayout=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px">
+      <div>
+        <label class="field-lbl"># PACKS <span id="qty-hint" style="color:#1e5c3a;font-size:11px;font-weight:800;letter-spacing:0;text-transform:none;margin-left:4px"></span></label>
+        <input id="pck-inp" class="inp" type="text" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="${esc(String(S.packCount))}" placeholder="3 or 2*3"/>
+      </div>
+      <div style="position:relative">
+        <label class="field-lbl">SIZE / PACK</label>
+        <input id="pck-size-inp" class="inp" type="text" inputmode="text"
+          value="${esc(String(S.packSize))}"
+          placeholder="500g or 16oz"
+          autocomplete="off" style="padding-right:28px"/>
+        <button id="pck-size-arrow" tabindex="-1" style="position:absolute;right:8px;top:calc(100% - 26px);background:none;border:none;cursor:pointer;font-size:13px;color:#7a6a55;line-height:1;padding:2px">▾</button>
+        <ul id="pck-size-drop" style="display:none;position:absolute;top:calc(100% + 2px);left:0;right:0;background:#f5f0e8;border:1.5px solid #6b2fd4;border-radius:10px;list-style:none;padding:4px;z-index:600;max-height:220px;overflow-y:auto;box-shadow:0 6px 20px #00000022"></ul>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 44px;gap:8px;align-items:end;margin-bottom:8px">
+      <div>
+        <label class="field-lbl">UNIT</label>
+        <select id="unit-sel" class="sel" style="width:100%">${UNITS.map(u=>`<option value="${u}"${u===curUnit?" selected":""}>${u}</option>`).join("")}</select>
+      </div>
+      <div>
+        <label class="field-lbl">= TOTAL</label>
+        <div id="pack-total-box" style="background:#e8f7f0;border:1.5px solid #2d7a4f;border-radius:10px;padding:9px 12px;font-size:14px;font-weight:700;color:#1e5c3a;min-height:40px;display:flex;align-items:center">${packTotalFmt}</div>
+      </div>
+      <div style="display:flex;align-items:flex-end">
+        <button class="add-btn" id="add-btn" tabindex="-1">＋</button>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:4px">
+      <div>
+        <label class="field-lbl">BRAND</label>
+        <div style="position:relative">
+          <input id="brand-inp" class="inp" type="text" inputmode="text" tabindex="-1"
+            value="${esc(sel&&sel.brand!=="—"?sel.brand:'')}"
+            placeholder="e.g. Bob's Red Mill"
+            autocorrect="off" spellcheck="false"/>
+          <ul id="brand-drop" style="display:none;position:absolute;top:calc(100% + 2px);left:0;right:0;background:#f5f0e8;border:1.5px solid #6b2fd4;border-radius:10px;list-style:none;padding:4px;z-index:600;max-height:180px;overflow-y:auto;box-shadow:0 6px 20px #00000022"></ul>
+        </div>
+      </div>
+      <div>
+        <label class="field-lbl">${currency().symbol} COST</label>
+        <div id="kd-zone" class="kd-total" style="background:#e8f7f0;border:1.5px solid #2d7a4f;border-radius:10px;padding:9px 12px;font-size:16px;font-weight:900;color:#1e5c3a;min-height:40px;display:flex;align-items:center">${cost}</div>
+      </div>
+    </div>
+    <div style="margin-bottom:4px;display:${!sel?"block":"none"}" id="cat-row">
+      <label class="field-lbl">CATEGORY <span style="color:#b45309;font-size:9px;font-weight:700">(NEW ITEM)</span></label>
+      <div style="position:relative">
+        <input id="enter-cat-inp" class="inp" type="text"
+          autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"
+          placeholder="Type or pick a category…"
+          style="background:#fff8e8;border-color:#e8a020"/>
+        <ul id="enter-cat-drop" style="display:none;position:absolute;top:calc(100% + 2px);left:0;right:0;background:#f5f0e8;border:1.5px solid #e8a020;border-radius:10px;list-style:none;padding:4px;z-index:600;max-height:220px;overflow-y:auto;box-shadow:0 6px 20px #00000022"></ul>
+      </div>
+    </div>`;
+
+
+  // Current unit for this item (from DB or default gm)
+  const activeUnit=S.directUnit||(sel?sel.unit:"gm");
+
+  const directLayout=`
+    <div style="margin-bottom:10px">
+      <label class="field-lbl">QTY <span id="qty-hint" style="color:#1e5c3a;font-size:11px;font-weight:800;letter-spacing:0;text-transform:none;margin-left:4px"></span></label>
+      <div style="display:grid;grid-template-columns:1fr 44px;gap:8px;align-items:center">
+        <input id="qty-inp" class="inp" type="text" inputmode="decimal" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" value="${esc(S.qty)}" placeholder="e.g. 500 or 2*250 or 32oz"/>
+        <button class="add-btn" id="add-btn" tabindex="-1">＋</button>
+      </div>
+    </div>
+    <div style="margin-bottom:12px">
+      <label class="field-lbl">UNIT — tap to change (updates database)</label>
+      <div class="unit-pills">
+        ${UNITS.map(u=>`<button class="unit-pill${u===activeUnit?" on":""}" data-unit="${u}" tabindex="-1">${u}</button>`).join("")}
+      </div>
+    </div>
+    <div style="margin-bottom:4px">
+      <label class="field-lbl">BRAND</label>
+      <div style="position:relative">
+        <input id="brand-inp" class="inp" type="text" inputmode="text" tabindex="-1"
+          value="${esc(sel&&sel.brand!=="—"?sel.brand:'')}"
+          placeholder="e.g. Bob's Red Mill"
+          autocorrect="off" spellcheck="false"/>
+        <ul id="brand-drop" style="display:none;position:absolute;top:calc(100% + 2px);left:0;right:0;background:#f5f0e8;border:1.5px solid #6b2fd4;border-radius:10px;list-style:none;padding:4px;z-index:600;max-height:180px;overflow-y:auto;box-shadow:0 6px 20px #00000022"></ul>
+      </div>
+    </div>
+    <div style="margin-bottom:4px;display:${!sel?"block":"none"}" id="cat-row">
+      <label class="field-lbl">CATEGORY <span style="color:#b45309;font-size:9px;font-weight:700">(NEW ITEM)</span></label>
+      <div style="position:relative">
+        <input id="enter-cat-inp" class="inp" type="text"
+          autocomplete="off" autocorrect="off" autocapitalize="words" spellcheck="false"
+          placeholder="Type or pick a category…"
+          style="background:#fff8e8;border-color:#e8a020"/>
+        <ul id="enter-cat-drop" style="display:none;position:absolute;top:calc(100% + 2px);left:0;right:0;background:#f5f0e8;border:1.5px solid #e8a020;border-radius:10px;list-style:none;padding:4px;z-index:600;max-height:220px;overflow-y:auto;box-shadow:0 6px 20px #00000022"></ul>
+      </div>
+    </div>`;
+
+
+  return `<div class="card">
+    <div class="card-header"><span class="card-bar"></span><span class="card-title">ENTER INVENTORY</span><span class="count-badge" id="ent-badge">${getGroupedLog().length} ENTRIES</span></div>
+    ${(()=>{
+      const calMonth=new Date().toLocaleString('default',{month:'long',year:'numeric'});
+      const wm=S.workingMonth||calMonth;
+      if(wm!==calMonth){
+        return `<div style="background:#fef3c7;border:1.5px solid #f59e0b;border-radius:10px;padding:8px 12px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;gap:8px">
+          <span style="font-size:12px;font-weight:700;color:#92400e">📅 Logging into: <strong>${wm}</strong> (not ${calMonth})</span>
+          <button onclick="setWorkingMonth('')" style="background:#f59e0b;color:#fff;border:none;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;cursor:pointer">Use Current</button>
+        </div>`;
+      }
+      return "";
+    })()}
+    <hr class="sep"/>
+    <div class="mode-row">
+      <span class="mode-lbl">Mode</span>
+      <button class="mode-btn${S.unitMode==="direct"?' on':''}" data-mode="direct" tabindex="-1">Direct (g/ml)</button>
+      <button class="mode-btn${S.unitMode==="pack"?' on':''}" data-mode="pack" tabindex="-1">By Pack</button>
+    </div>
+    <div class="inner-card">
+      <div style="position:relative;margin-bottom:14px">
+        <input id="name-inp" class="inp-lg"
+          value="${esc(S.itemName)}"
+          placeholder="Ingredient name"
+          type="text"
+          autocomplete="off"
+          autocorrect="off"
+          autocapitalize="words"
+          spellcheck="false"/>
+        <div id="sug-zone"></div>
+      </div>
+      <div id="name-info">${buildNameInfo()}</div>
+      ${S.unitMode==="pack"?packLayout:directLayout}
+      ${S.unitMode==="direct"?`<div id="kd-zone" class="kd-total">${cost}</div>`:""}
+    </div>
+    ${S.unitMode==="direct"&&amt>0?`<div id="prev-zone"><div class="preview-bar">→ <strong>${fmt(amt)}</strong> ${sel?sel.unit:"gm"}</div></div>`:`<div id="prev-zone"></div>`}
+  </div>`;
+}
+
+function buildNameInfo(){
+  const sel=selItem();
+  const unit=S.unitMode==="pack"?(sel?sel.unit:"gm"):(S.directUnit||(sel?sel.unit:"gm"));
+  if(sel){
+    const sb=sheetBadge(sel);
+    return `<div class="info-strip">${sb?`<span>${sb}</span>`:""}🏷 ${esc(sel.brand||"—")}<span>📦 ${unit}</span><span>This month: <strong>${fmt(sel.cm)}${unit}</strong></span></div>`;
+  }
+  if(S.itemName.trim()&&!S.showSug) return `<span class="new-tag">✦ NEW — will be added to database</span>`;
+  return "";
+}
+
+// Sheet badge colours for visual identification
+const SHEET_COLORS={
+  "STICKER":               {bg:"#f8fafc",color:"#334155", label:"STICKER"},
+  "STICKERS NEW":          {bg:"#f1f5f9",color:"#1e293b", label:"STICKERS NEW"},
+  "ALL STICKER":           {bg:"#f8fafc",color:"#334155", label:"ALL STICKER"},
+  "CONSUMABLE ITEMS":      {bg:"#f0fdf4",color:"#166534", label:"CONSUMABLE"},
+  "FOOD ITEMS":            {bg:"#eff6ff",color:"#1e40af", label:"FOOD"},
+  "TEA PRODUCT":           {bg:"#fef9c3",color:"#854d0e", label:"TEA"},
+  "FOOD SUPPLEMENTS":      {bg:"#fdf4ff",color:"#6b21a8", label:"SUPPLEMENTS"},
+  "HERBAL & BOTANICAL":    {bg:"#f0fdfa",color:"#115e59", label:"HERBAL"},
+  "FRUIT AND VEGETABLES":  {bg:"#fff7ed",color:"#9a3412", label:"FRUIT & VEG"},
+  "FROZEN Items":          {bg:"#f0f9ff",color:"#075985", label:"FROZEN"},
+  "ALL FROZEN ITEMS":      {bg:"#f0f9ff",color:"#075985", label:"ALL FROZEN"},
+  "FNISH PRODUCT":         {bg:"#fef2f2",color:"#991b1b", label:"FINISH"},
+  "ALL FINISH PRODUCT":    {bg:"#fef2f2",color:"#991b1b", label:"ALL FINISH"},
+  "RETAIL PRODUCTS":       {bg:"#f9fafb",color:"#374151", label:"RETAIL"},
+  "BULK PRODUCTION":       {bg:"#fefce8",color:"#713f12", label:"BULK PROD"},
+};
+function sheetBadge(item){
+  if(!item||!item.sourceSheet) return "";
+  const c=SHEET_COLORS[item.sourceSheet]||{bg:"#f3f4f6",color:"#374151",label:item.sourceSheet};
+  return `<span style="display:inline-block;padding:1px 6px;border-radius:10px;font-size:9px;font-weight:700;background:${c.bg};color:${c.color};letter-spacing:.3px;flex-shrink:0">${c.label}</span>`;
+}
+
+function buildSugHtml(){
+  if(!S.showSug||!S.itemName.trim()) return "";
+  const sugs=getSugs(S.itemName);
+  if(!sugs.length) return "";
+  return `<ul class="dropdown">`+sugs.map((r,i)=>
+    `<li class="drop-item${i===S.activeIdx?" hi":""}" data-sug-id="${esc(r.item.id)}" data-sug="${esc(r.item.name)}">
+      <span class="drop-name">${r.nh} ${sheetBadge(r.item)}</span>
+      <span class="drop-meta">${esc(r.item.brand&&r.item.brand!=="—"?r.item.brand:"no brand")} · ${r.item.unit}</span>
+    </li>`).join("")+`</ul>`;
+}
+
+// KEY: These patch only specific zones — the name-inp itself is NEVER touched
+function patchSugZone(){
+  const z=$id("sug-zone"); if(z) z.innerHTML=buildSugHtml();
+}
+function patchNameInfo(){
+  const z=$id("name-info"); if(z) z.innerHTML=buildNameInfo();
+  // Show category row only when item is new (not in DB)
+  const catRow=$id("cat-row");
+  if(catRow){
+    const exists=!!selItem();
+    const hasName=S.itemName.trim().length>0;
+    catRow.style.display=(hasName&&!exists)?"block":"none";
+  }
+}
+function patchKD(){
+  const sel=selItem(), amt=calcAmt();
+  const kdVal=fmtCost(amt*(sel?sel.ppu:0));
+  const kd=$id("kd-zone"); if(kd) kd.textContent=kdVal;
+  // Direct mode preview bar
+  if(S.unitMode==="direct"){
+    const pv=$id("prev-zone");
+    if(pv) pv.innerHTML=amt>0?`<div class="preview-bar">→ <strong>${fmt(amt)}</strong> ${S.directUnit==="oz"?"gm (oz converted)":(sel?sel.unit:"gm")}</div>`:"";
+    if(S.directUnit==="oz"){
+      const raw=safeEval(S.qty);
+      const hint=$id("qty-hint");
+      if(hint&&!isNaN(raw)&&raw>0) hint.textContent=`= ${fmt(raw*28.3495)} gm`;
+    }
+  }
+  // Pack mode: update live total box
+  if(S.unitMode==="pack"){
+    const tb=$id("pack-total-box");
+    const packTotal=safeEval(S.packCount)*S.packSize;
+    if(tb) tb.textContent=(!isNaN(packTotal)&&packTotal>0)?fmt(packTotal)+" "+(sel?sel.unit:"gm"):"—";
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// WIRE ENTER — events attached once per mountTab
+// ═══════════════════════════════════════════════════════
+function wireEnter(){
+  const ni=$id("name-inp");
+  if(!ni) return;
+
+  // ── Focus routing flags ─────────────────────────────────
+  let _nameToQty=false;
+  let _dropTouched=false;
+
+  let _enterPressed=false; // only true when user pressed Enter/Next key on qty/pack
+
+  function _brandValue(){
+    const bi=$id("brand-inp");
+    return bi ? bi.value.trim() : "";
+  }
+  function _brandNeedsInput(){
+    const v=_brandValue();
+    return !v || v==="—";
+  }
+
+  // After QTY is confirmed: decide next stop
+  function _afterQty(){
+    if(_brandNeedsInput()){
+      const bi=$id("brand-inp");
+      if(bi){ bi.removeAttribute("tabindex"); bi.focus(); try{bi.select();}catch(x){} }
+    } else {
+      // Brand already filled — save directly
+      _enterPressed=false;
+      _qtyToNameFlag=true;
+      doAdd();
+    }
+  }
+
+  // ── IME / Samsung keyboard ──────────────────────────────
+  let _imeTimer;
+  let _composing=false;
+  ni.addEventListener("compositionstart",()=>{ _composing=true; });
+  ni.addEventListener("compositionend",function(){
+    _composing=false;
+    clearTimeout(_imeTimer);
+    S.itemName=this.value;
+    S.showSug=!!(this.value.trim()); S.activeIdx=-1;
+    patchSugZone(); patchNameInfo();
+  });
+  ni.addEventListener("input",function(){
+    clearTimeout(_imeTimer);
+    const v=this.value;
+    _imeTimer=setTimeout(()=>{
+      S.itemName=v;
+      S.showSug=!!(v.trim()); S.activeIdx=-1;
+      patchSugZone(); patchNameInfo();
+    }, _composing ? 120 : 0);
+  });
+
+  // ── Name keydown ────────────────────────────────────────
+  ni.addEventListener("keydown",function(e){
+    if(e.key==="Tab"){ e.preventDefault(); return; }
+    const sugs=getSugs(S.itemName);
+    if(e.key==="ArrowDown"){ e.preventDefault(); S.activeIdx=Math.min(S.activeIdx+1,sugs.length-1); patchSugZone(); return; }
+    if(e.key==="ArrowUp"){   e.preventDefault(); S.activeIdx=Math.max(S.activeIdx-1,0);             patchSugZone(); return; }
+    if(e.key==="Escape"){ S.showSug=false; patchSugZone(); return; }
+    if(e.key==="Enter"){
+      e.preventDefault();
+      clearTimeout(_imeTimer);
+      if(S.showSug&&S.activeIdx>=0&&sugs[S.activeIdx]){ pickSug(sugs[S.activeIdx].item); return; }
+      S.itemName=ni.value.trim();
+      if(!S.itemName){ toast("Enter an ingredient name","err"); return; }
+      const smart=smartPackSize(S.itemName);
+      if(smart) S.packSize=smart;
+      S.showSug=false; patchSugZone(); patchNameInfo();
+      _nameToQty=true;
+      const nx=$id(S.unitMode==="pack"?"pck-inp":"qty-inp");
+      if(nx){ nx.focus(); try{nx.select();}catch(x){} }
+    }
+  });
+
+  // ── Name focus / blur ───────────────────────────────────
+  ni.addEventListener("focus",function(){
+    try{ this.select(); }catch(x){}
+    if(S.itemName.trim()){ S.showSug=true; patchSugZone(); }
+  });
+  ni.addEventListener("blur",function(){
+    setTimeout(()=>{
+      if(_nameToQty){ _nameToQty=false; return; }
+      if(_pickSugJump){ _pickSugJump=false; return; }
+      if(_dropTouched){ _dropTouched=false; return; }
+      S.showSug=false; patchSugZone(); patchNameInfo();
+    },300);
+  });
+
+  // ── Dropdown touch guard ────────────────────────────────
+  const mc=$id("main-content");
+  if(!mc._dropWired){
+    mc._dropWired=true;
+    mc.addEventListener("touchstart",function(e){
+      if(e.target.closest(".drop-item")) _dropTouched=true;
+    },{passive:true});
+    mc.addEventListener("mousedown",function(e){
+      const li=e.target.closest(".drop-item");
+      if(li){ e.preventDefault(); const it=li.dataset.sugId?db.find(d=>d.id===li.dataset.sugId):db.find(d=>d.name===li.dataset.sug); if(it) pickSug(it); }
+    });
+    mc.addEventListener("touchend",function(e){
+      const li=e.target.closest(".drop-item");
+      if(li){
+        if(!isTap(e)) return;
+        e.preventDefault(); _dropTouched=false;
+        const it=li.dataset.sugId?db.find(d=>d.id===li.dataset.sugId):db.find(d=>d.name===li.dataset.sug);
+        if(it) pickSug(it);
+      }
+    },{passive:false});
+  }
+
+  // ── QTY field ───────────────────────────────────────────
+  const qi=$id("qty-inp");
+  if(qi){
+    qi.addEventListener("input",function(){
+      // Strip spaces inserted by mobile autocorrect after decimal point
+      if(this.value.includes(" ")){
+        const pos=this.selectionStart;
+        const spaces=this.value.slice(0,pos).split(" ").length-1;
+        this.value=this.value.replace(/\s/g,"");
+        try{ this.setSelectionRange(pos-spaces,pos-spaces); }catch(x){}
+      }
+      // Auto-prepend 0 if starts with . (e.g. .876 → 0.876)
+      if(this.value.match(/^\./)) this.value="0"+this.value;
+      S.qty=this.value;
+      patchKD();
+      const v=this.value.trim();
+      if(v&&/[\+\-\*\/×÷]/.test(v)){
+        const result=safeEval(v);
+        const hint=$id("qty-hint");
+        if(hint) hint.textContent=isNaN(result)?"invalid":"= "+fmt(result);
+      } else {
+        const hint=$id("qty-hint"); if(hint) hint.textContent="";
+      }
+    });
+    qi.addEventListener("keydown",function(e){
+      if(e.key==="Tab"){ e.preventDefault(); return; }
+      if(e.key==="Enter"){ e.preventDefault(); _trySubmitQty(); }
+    });
+    // blur: Android Next/→ key — only submit if not going to an internal field
+    qi.addEventListener("blur",function(){
+      setTimeout(()=>{
+        const active=document.activeElement;
+        if(active&&(active.id==="name-inp"||active.id==="brand-inp"||active.id==="unit-sel"||active.id==="pck-size-inp"||active.id==="add-btn")) return;
+        const result=safeEval(S.qty);
+        // Only auto-advance if user came here via Enter key (not app-switch or tap-away)
+        if(_enterPressed&&S.qty&&!isNaN(result)&&result>0){
+          S.qty=String(result);
+          if(qi) qi.value=S.qty;
+          _afterQty();
+        }
+      },80);
+    });
+  }
+
+  // ── Pack count field ────────────────────────────────────
+  const pi=$id("pck-inp");
+  if(pi){
+    pi.addEventListener("input",function(){
+      if(this.value.includes(" ")){
+        const pos=this.selectionStart;
+        const spaces=this.value.slice(0,pos).split(" ").length-1;
+        this.value=this.value.replace(/\s/g,"");
+        try{ this.setSelectionRange(pos-spaces,pos-spaces); }catch(x){}
+      }
+      if(this.value.match(/^\./)) this.value="0"+this.value;
+      S.packCount=this.value; patchKD();
+    });
+    pi.addEventListener("keydown",function(e){
+      if(e.key==="Tab"){ e.preventDefault(); return; }
+      if(e.key==="Enter"){ e.preventDefault(); _trySubmitPack(); }
+    });    pi.addEventListener("blur",function(){
+      setTimeout(()=>{
+        const active=document.activeElement;
+        if(active&&(active.id==="name-inp"||active.id==="brand-inp"||active.id==="cost-inp"||active.id==="pck-sel"||active.id==="pck-size-inp"||active.id==="add-btn")) return;
+        const result=safeEval(S.packCount);
+        if(_enterPressed&&S.packCount&&!isNaN(result)&&result>0){
+          S.packCount=String(result);
+          if(pi) pi.value=S.packCount;
+          _afterQty();
+        }
+      },80);
+    });
+  }
+
+  function _trySubmitQty(){
+    const raw=qi?qi.value.trim():"";
+    const result=safeEval(raw);
+    if(!raw||isNaN(result)||result<=0){ toast("Enter a quantity > 0","err"); return; }
+    if(qi){ qi.value=String(result); }
+    S.qty=String(result);
+    _enterPressed=true;
+    _afterQty();
+  }
+  function _trySubmitPack(){
+    const raw=pi?pi.value.trim():"";
+    const result=safeEval(raw);
+    if(!raw||isNaN(result)||result<=0){ toast("Enter number of packs > 0","err"); return; }
+    if(pi){ pi.value=String(result); }
+    S.packCount=String(result);
+    _enterPressed=true;
+    // Move to size/pack field
+    const psi=$id("pck-size-inp");
+    if(psi){ psi.focus(); try{psi.select();}catch(x){} }
+    else _afterQty();
+  }
+
+  // ── Unit select — updates DB permanently ───────────────
+  const us=$id("unit-sel");
+  if(us){
+    us.addEventListener("change",function(){
+      const newUnit=this.value;
+      // Update DB item unit permanently
+      const it=selItem();
+      if(it){ it.unit=newUnit; saveData(); }
+      patchKD(); patchNameInfo();
+    });
+    us.addEventListener("keydown",function(e){
+      if(e.key==="Enter"){ e.preventDefault();
+        if(_brandNeedsInput()){
+          const bi=$id("brand-inp");
+          if(bi){ bi.removeAttribute("tabindex"); bi.focus(); try{bi.select();}catch(x){} }
+        } else { _enterPressed=false; _qtyToNameFlag=true; doAdd(); }
+      }
+    });
+  }
+
+  // ── Pack size — editable input with oz+gm dropdown ─────
+  const psi=$id("pck-size-inp");
+  const psdrop=$id("pck-size-drop");
+  const psarrow=$id("pck-size-arrow");
+  if(psi&&psdrop){
+    const {gmSizes,ozSizes}=getPackSizeOpts(selItem()?selItem().unit:"gm");
+
+    function buildPackDrop(filter){
+      const q=(filter||"").toLowerCase().trim();
+      // Filter oz sizes
+      const filteredOz=ozSizes.filter(({oz,gm})=>
+        !q||String(oz).includes(q)||String(gm).includes(q)||("oz").includes(q)
+      );
+      // Filter gm sizes
+      const filteredGm=gmSizes.filter(g=>
+        !q||String(g).includes(q)||("gm").includes(q)
+      );
+      if(!filteredOz.length&&!filteredGm.length){ psdrop.style.display="none"; return; }
+      let html="";
+      if(filteredOz.length){
+        html+=`<li style="padding:3px 8px;font-size:10px;font-weight:700;color:#7a6a55;letter-spacing:.5px;text-transform:uppercase;cursor:default">OZ → GM</li>`;
+        html+=filteredOz.map(({oz,gm})=>
+          `<li data-gm="${gm}" style="padding:7px 11px;border-radius:7px;cursor:pointer;font-size:13px;color:#1a1208;display:flex;justify-content:space-between;align-items:center">
+            <strong>${oz} oz</strong>
+            <span style="color:#5a4a35;font-size:11px;font-weight:600">= ${gm} g</span>
+          </li>`).join("");
+      }
+      if(filteredGm.length){
+        html+=`<li style="padding:3px 8px 3px;font-size:10px;font-weight:700;color:#7a6a55;letter-spacing:.5px;text-transform:uppercase;cursor:default;border-top:1px solid #d9cfc0;margin-top:4px;padding-top:6px">GM SIZES</li>`;
+        html+=filteredGm.map(g=>
+          `<li data-gm="${g}" style="padding:7px 11px;border-radius:7px;cursor:pointer;font-size:13px;font-weight:600;color:#1a1208">
+            ${g} g
+          </li>`).join("");
+      }
+      psdrop.innerHTML=html;
+      psdrop.style.display="block";
+    }
+
+    function pickPackSize(gm){
+      S.packSize=gm;
+      psi.value=String(gm);
+      psdrop.style.display="none";
+      patchKD();
+      // Move to # packs field
+      const pc=$id("pck-inp"); if(pc){ pc.focus(); try{pc.select();}catch(x){} }
+    }
+
+    function hidePackDrop(){ setTimeout(()=>{ psdrop.style.display="none"; },220); }
+
+    psi.addEventListener("focus",function(){ buildPackDrop(this.value); });
+    psi.addEventListener("input",function(){
+      if(this.value.match(/^\./)) this.value="0"+this.value;
+      const raw=this.value;
+      // Try to parse — support oz input like "16oz" or "16 oz"
+      const ozMatch=raw.match(/^(\d+\.?\d*)\s*oz$/i);
+      if(ozMatch){
+        const oz=parseFloat(ozMatch[1]);
+        const gm=OZ_TO_GM[oz]||Math.round(oz*28.3495);
+        S.packSize=gm;
+      } else {
+        const v=safeEval(raw);
+        if(!isNaN(v)&&v>0) S.packSize=v;
+      }
+      patchKD();
+      buildPackDrop(raw);
+    });
+    psi.addEventListener("blur",function(){
+      const raw=this.value.trim();
+      const ozMatch=raw.match(/^(\d+\.?\d*)\s*oz$/i);
+      if(ozMatch){
+        const oz=parseFloat(ozMatch[1]);
+        const gm=OZ_TO_GM[oz]||Math.round(oz*28.3495);
+        S.packSize=gm; this.value=String(gm);
+      } else {
+        const v=safeEval(raw);
+        if(!isNaN(v)&&v>0){ S.packSize=v; this.value=String(v); }
+      }
+      patchKD();
+      hidePackDrop();
+    });
+    psi.addEventListener("keydown",function(e){
+      if(e.key==="ArrowDown"||e.key==="ArrowUp"){
+        e.preventDefault();
+        const items=[...psdrop.querySelectorAll("li[data-gm]")];
+        if(!items.length){ buildPackDrop(""); return; }
+        const cur=psdrop.querySelector("li[data-gm].hi");
+        let idx=items.indexOf(cur);
+        items.forEach(l=>{ l.classList.remove("hi"); l.style.background=""; });
+        idx=e.key==="ArrowDown"?Math.min(idx+1,items.length-1):Math.max(idx-1,0);
+        if(idx<0) idx=0;
+        items[idx].classList.add("hi"); items[idx].style.background="#ece6f8";
+        items[idx].scrollIntoView({block:"nearest"});
+        psdrop.style.display="block";
+        return;
+      }
+      if(e.key==="Enter"||e.key==="Tab"){
+        e.preventDefault();
+        const hi=psdrop.querySelector("li[data-gm].hi");
+        if(hi){ pickPackSize(parseFloat(hi.dataset.gm)); return; }
+        const raw=this.value.trim();
+        const ozMatch=raw.match(/^(\d+\.?\d*)\s*oz$/i);
+        if(ozMatch){
+          const oz=parseFloat(ozMatch[1]);
+          const gm=OZ_TO_GM[oz]||Math.round(oz*28.3495);
+          S.packSize=gm; this.value=String(gm);
+        } else {
+          const v=safeEval(raw);
+          if(!isNaN(v)&&v>0){ S.packSize=v; this.value=String(v); }
+        }
+        psdrop.style.display="none"; patchKD();
+        const usel=$id("unit-sel"); if(usel) usel.focus();
+      }
+    });
+
+    psarrow&&psarrow.addEventListener("mousedown",function(e){
+      e.preventDefault();
+      if(psdrop.style.display==="none"){ buildPackDrop(""); psi.focus(); }
+      else psdrop.style.display="none";
+    });
+    psarrow&&psarrow.addEventListener("touchend",function(e){
+      if(!isTap(e)) return;
+      e.preventDefault();
+      if(psdrop.style.display==="none"){ buildPackDrop(""); psi.focus(); }
+      else psdrop.style.display="none";
+    },{passive:false});
+
+    psdrop.addEventListener("mousedown",function(e){
+      const li=e.target.closest("li[data-gm]");
+      if(li){ e.preventDefault(); pickPackSize(parseFloat(li.dataset.gm)); }
+    });
+    psdrop.addEventListener("touchend",function(e){
+      const li=e.target.closest("li[data-gm]");
+      if(li){ if(!isTap(e)) return; e.preventDefault(); pickPackSize(parseFloat(li.dataset.gm)); }
+    },{passive:false});
+    psdrop.addEventListener("mouseover",function(e){
+      const li=e.target.closest("li[data-gm]"); if(!li) return;
+      psdrop.querySelectorAll("li[data-gm]").forEach(l=>l.style.background="");
+      li.style.background="#ece6f8";
+    });
+  }
+
+  // ── Brand field ─────────────────────────────────────────
+  const bi=$id("brand-inp");
+  const bdrop=$id("brand-drop");
+  if(bi){
+    // Enter on brand → save
+    bi.addEventListener("keydown",function(e){
+      if(e.key==="Tab"){ e.preventDefault(); return; }
+      // Arrow key navigation through dropdown
+      if(bdrop.style.display==="block"){
+        const items=[...bdrop.querySelectorAll("li[data-brand]")];
+        const cur=bdrop.querySelector("li.hi");
+        if(e.key==="ArrowDown"){ e.preventDefault();
+          const idx=cur?items.indexOf(cur):-1;
+          const next=items[Math.min(idx+1,items.length-1)];
+          if(next){ items.forEach(l=>l.classList.remove("hi")); next.classList.add("hi"); next.scrollIntoView({block:"nearest"}); }
+          return;
+        }
+        if(e.key==="ArrowUp"){ e.preventDefault();
+          const idx=cur?items.indexOf(cur):items.length;
+          const prev=items[Math.max(idx-1,0)];
+          if(prev){ items.forEach(l=>l.classList.remove("hi")); prev.classList.add("hi"); prev.scrollIntoView({block:"nearest"}); }
+          return;
+        }
+        if(e.key==="Escape"){ bdrop.style.display="none"; return; }
+      }
+      if(e.key==="Enter"){
+        e.preventDefault();
+        if(bdrop&&bdrop.style.display==="block"){
+          const hi=bdrop.querySelector("li.hi")||bdrop.querySelector("li");
+          if(hi){ bi.value=hi.dataset.brand||hi.textContent; bdrop.style.display="none"; }
+        }
+        // If category row is visible (new item), move focus there instead of saving
+        const catRow=$id("cat-row");
+        const catInp=$id("enter-cat-inp");
+        if(catRow&&catRow.style.display!=="none"&&catInp){
+          catInp.focus(); return;
+        }
+        _enterPressed=false;
+        _qtyToNameFlag=true;
+        doAdd();
+      }
+    });
+    // blur on brand: if focus goes to cost or add-btn don't save; any other = save
+    bi.addEventListener("blur",function(){
+      setTimeout(()=>{
+        const active=document.activeElement;
+        if(active&&(active.id==="cost-inp"||active.id==="add-btn"||active.id==="name-inp"||active.id==="enter-cat-inp")) return;
+        if(!_enterPressed) return;
+        const result=safeEval(S.unitMode==="pack"?S.packCount:S.qty);
+        if(result>0&&S.itemName.trim()){
+          _enterPressed=false;
+          _qtyToNameFlag=true;
+          doAdd();
+        }
+      },250);
+    });
+  }
+
+  // Brand dropdown wiring
+  if(bi&&bdrop){
+    function getBrands(){ return [...new Set(db.map(d=>d.brand).filter(b=>b&&b!=="—"))].sort(); }
+    function showBrandDrop(filter){
+      const q=(filter||"").toLowerCase().trim();
+      const matches=getBrands().filter(b=>!q||b.toLowerCase().includes(q));
+      if(!matches.length){ bdrop.style.display="none"; return; }
+      bdrop.innerHTML=matches.map(b=>`<li data-brand="${esc(b)}">${esc(b)}</li>`).join("");
+      bdrop.style.display="block";
+    }
+    function hideBrandDrop(){ setTimeout(()=>{ bdrop.style.display="none"; },250); }
+    bi.addEventListener("focus",function(){ showBrandDrop(this.value); });
+    bi.addEventListener("input",function(){
+      showBrandDrop(this.value);
+      // Highlight first match
+      const first=bdrop.querySelector("li");
+      if(first){ bdrop.querySelectorAll("li").forEach(l=>l.classList.remove("hi")); first.classList.add("hi"); }
+    });
+    bi.addEventListener("blur",hideBrandDrop);
+    bdrop.addEventListener("mousedown",function(e){
+      const li=e.target.closest("li[data-brand]");
+      if(li){ e.preventDefault(); bi.value=li.dataset.brand; bdrop.style.display="none"; }
+    });
+    bdrop.addEventListener("touchend",function(e){
+      const li=e.target.closest("li[data-brand]");
+      if(li){ if(!isTap(e)) return; e.preventDefault(); bi.value=li.dataset.brand; bdrop.style.display="none"; }
+    },{passive:false});
+  }
+
+  // ── Unit pills (direct mode) ────────────────────────────
+  document.querySelectorAll(".unit-pill[data-unit]").forEach(btn=>{
+    btn.addEventListener("click",function(){
+      const newUnit=this.dataset.unit;
+      S.directUnit=newUnit;
+      // Update DB item unit permanently
+      const it=selItem();
+      if(it){ it.unit=newUnit; saveData(); }
+      // Update pill highlights in-place (no full rebuild)
+      document.querySelectorAll(".unit-pill[data-unit]").forEach(b=>{
+        b.classList.toggle("on", b.dataset.unit===newUnit);
+      });
+      patchKD(); patchNameInfo();
+    });
+    // Touch support
+    btn.addEventListener("touchend",function(e){
+      if(!isTap(e)) return;
+      e.preventDefault(); this.click();
+    },{passive:false});
+  });
+  const ci=$id("cost-inp");
+  if(ci) ci.addEventListener("input",function(){
+    const it=selItem(); if(it){ it.ppu=parseFloat(this.value)||0; patchKD(); }
+  });
+
+  // ── Category dropdown (new items only) ─────────────────
+  function wireCatSel(){
+    const ci=$id("enter-cat-inp");
+    const cdrop=$id("enter-cat-drop");
+    if(!ci||!cdrop) return;
+
+    const allCats=[...new Set(db.map(d=>d.sourceSheet).filter(Boolean))].sort();
+
+    function buildCatList(q){
+      const filtered=q
+        ? allCats.filter(c=>c.toLowerCase().includes(q.toLowerCase())||(SHEET_COLORS[c]||{label:c}).label.toLowerCase().includes(q.toLowerCase()))
+        : allCats;
+      cdrop.innerHTML="";
+      if(!filtered.length&&!q){ cdrop.style.display="none"; return; }
+      // Existing matches
+      filtered.forEach(cat=>{
+        const c=SHEET_COLORS[cat]||{color:"#374151",label:cat};
+        const li=document.createElement("li");
+        li.dataset.val=cat;
+        li.style.cssText="padding:9px 12px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:10px;font-weight:700;font-size:13px;color:#1a1208";
+        li.innerHTML=`<span style="width:10px;height:10px;border-radius:50%;background:${c.color};flex-shrink:0;display:inline-block"></span>${esc(c.label)}`;
+        li.addEventListener("mousedown",e=>{ e.preventDefault(); ci.value=c.label; ci.dataset.val=cat; cdrop.style.display="none"; });
+        li.addEventListener("touchend",e=>{ e.preventDefault(); ci.value=c.label; ci.dataset.val=cat; cdrop.style.display="none"; });
+        cdrop.appendChild(li);
+      });
+      // "Create new" option always shown when there's text
+      if(q){
+        const li=document.createElement("li");
+        li.dataset.val="__new__:"+q;
+        li.style.cssText="padding:9px 12px;border-radius:8px;cursor:pointer;font-weight:700;font-size:13px;color:#6b2fd4";
+        li.textContent="✦ Create \""+q+"\" as new category";
+        li.addEventListener("mousedown",e=>{ e.preventDefault(); ci.value=q; ci.dataset.val="__new__:"+q; cdrop.style.display="none"; });
+        li.addEventListener("touchend",e=>{ e.preventDefault(); ci.value=q; ci.dataset.val="__new__:"+q; cdrop.style.display="none"; });
+        cdrop.appendChild(li);
+      }
+      cdrop.style.display=cdrop.children.length?"block":"none";
+    }
+
+    // Open dropdown on focus/click
+    ci.addEventListener("focus",()=>buildCatList(ci.value));
+    ci.addEventListener("input",()=>buildCatList(ci.value));
+
+    // Keyboard navigation
+    ci.addEventListener("keydown",function(e){
+      const items=[...cdrop.querySelectorAll("li")];
+      const cur=cdrop.querySelector("li.hi");
+      if(e.key==="ArrowDown"){
+        e.preventDefault();
+        const next=items[cur?Math.min(items.indexOf(cur)+1,items.length-1):0];
+        items.forEach(l=>l.classList.remove("hi")); if(next){next.classList.add("hi");next.scrollIntoView({block:"nearest"});}
+        return;
+      }
+      if(e.key==="ArrowUp"){
+        e.preventDefault();
+        const prev=items[cur?Math.max(items.indexOf(cur)-1,0):items.length-1];
+        items.forEach(l=>l.classList.remove("hi")); if(prev){prev.classList.add("hi");prev.scrollIntoView({block:"nearest"});}
+        return;
+      }
+      if(e.key==="Escape"){ cdrop.style.display="none"; return; }
+      if(e.key==="Enter"){
+        e.preventDefault();
+        // If a dropdown item is highlighted, select it
+        if(cur){
+          ci.value=cur.textContent.replace(/^✦ Create "/,"").replace(/" as new category$/,"");
+          ci.dataset.val=cur.dataset.val;
+          cdrop.style.display="none";
+        }
+        // Save entry and jump back to ingredient name
+        _enterPressed=false; _qtyToNameFlag=true; doAdd();
+      }
+    });
+
+    // Close on outside click
+    document.addEventListener("mousedown",function outsideCat(e){
+      if(!ci.contains(e.target)&&!cdrop.contains(e.target)){
+        cdrop.style.display="none";
+        document.removeEventListener("mousedown",outsideCat);
+      }
+    });
+  }
+  wireCatSel();
+
+  // ── Add button ──────────────────────────────────────────
+  const ab=$id("add-btn");
+  if(ab) ab.addEventListener("click",function(){
+    const qf=$id("qty-inp"), pf=$id("pck-inp");
+    if(qf){ const r=safeEval(qf.value); S.qty=isNaN(r)?qf.value:String(r); qf.value=S.qty; }
+    if(pf){ const r=safeEval(pf.value); S.packCount=isNaN(r)?pf.value:String(r); pf.value=S.packCount; }
+    _enterPressed=false;
+    doAdd();
+  });
+
+  // ── Mode buttons ────────────────────────────────────────
+  document.querySelectorAll(".mode-btn[data-mode]").forEach(b=>{
+    b.addEventListener("click",function(){
+      if(!this.dataset.mode||this.dataset.mode===S.unitMode) return;
+      S.unitMode=this.dataset.mode;
+      $id("main-content").innerHTML=buildEnter();
+      wireEnter();
+      setTimeout(()=>{ const n=$id("name-inp"); if(n){ n.focus(); try{n.select();}catch(x){} } },30);
+    });
+  });
+}
+
+function pickSug(item){
+  S.itemName=item.name;
+  S.activeSheet=item.sourceSheet||"";
+  S.showSug=false; S.activeIdx=-1;
+  const ps=PACK_SIZES[item.unit]||PACK_SIZES.gm||[{v:500}];
+  // Smart pack size: use known size for this ingredient, else first option
+  const smart=smartPackSize(item.name);
+  S.packSize=smart||ps[0].v;
+  const ni=$id("name-inp");
+  if(ni) ni.value=item.name;
+  const bi=$id("brand-inp");
+  if(bi) bi.value=item.brand||"";
+  const ci=$id("cost-inp");
+  if(ci) ci.value=item.ppu||"";
+  S.directUnit=item.unit||"gm";
+  // Update unit pill highlights in-place
+  document.querySelectorAll(".unit-pill[data-unit]").forEach(b=>{
+    b.classList.toggle("on", b.dataset.unit===S.directUnit);
+  });
+  // Update pack size input if in pack mode
+  const psi=$id("pck-size-inp");
+  if(psi) psi.value=String(S.packSize);
+  patchSugZone();
+  patchNameInfo();
+  patchKD();
+  _pickSugJump=true;
+  const nx=$id(S.unitMode==="pack"?"pck-inp":"qty-inp");
+  if(nx){ nx.focus(); try{nx.select();}catch(x){} }
+}
+
+function doAdd(){
+  _enterPressed=false; // always clear — prevents any stale auto-save
+  const name=S.itemName.trim();
+  if(!name){ _qtyToNameFlag=false; toast("Enter an ingredient name","err"); const ni=$id("name-inp"); if(ni){ ni.focus(); try{ni.select();}catch(x){} } return; }
+  let amt=calcAmt();
+  if(isNaN(amt)||amt<=0){ _qtyToNameFlag=false; toast("Quantity must be > 0","err"); return; }
+
+  let item=db.find(d=>d.name.toLowerCase()===name.toLowerCase()&&(!S.activeSheet||(d.sourceSheet||"").toLowerCase()===S.activeSheet.toLowerCase()));
+  // Fallback: if no exact sheet match, find any item with same name
+  if(!item) item=db.find(d=>d.name.toLowerCase()===name.toLowerCase());
+  const wasNew=!item;
+  if(!item){
+    const costInp=$id("cost-inp");
+    const bi=$id("brand-inp");
+    const ppu=costInp?parseFloat(costInp.value)||0:0;
+    const brand=bi&&bi.value.trim()?bi.value.trim():"—";
+    const us=$id("unit-sel");
+    const unit=us?us.value:(S.directUnit||"gm");
+    // Read category from the custom category input
+    let sourceSheet="";
+    const catInpEl=$id("enter-cat-inp");
+    if(catInpEl&&catInpEl.value.trim()){
+      const val=catInpEl.dataset.val||"";
+      if(val.startsWith("__new__:")){
+        sourceSheet=val.replace("__new__:","").trim().toUpperCase()||catInpEl.value.trim().toUpperCase();
+      } else if(val){
+        sourceSheet=val;
+      } else {
+        const typed=catInpEl.value.trim().toUpperCase();
+        const match=[...new Set(db.map(d=>d.sourceSheet).filter(Boolean))].find(s=>s.toUpperCase()===typed||(SHEET_COLORS[s]||{label:s}).label.toUpperCase()===typed);
+        sourceSheet=match||typed;
+      }
+      if(sourceSheet && !SHEET_COLORS[sourceSheet]){
+        const palette=[{bg:"#fef3c7",color:"#92400e"},{bg:"#e0f2fe",color:"#075985"},{bg:"#f0fdf4",color:"#166534"},{bg:"#fdf4ff",color:"#6b21a8"},{bg:"#fff7ed",color:"#9a3412"},{bg:"#f0fdfa",color:"#115e59"}];
+        SHEET_COLORS[sourceSheet]={...palette[Object.keys(SHEET_COLORS).length%palette.length],label:sourceSheet};
+      }
+    }
+    item={id:uid(),name,unit,brand,ppu,lm:0,cm:0,sourceSheet};
+    item.cm=parseFloat((amt).toFixed(4));
+    db.push(item);
+    toast(`"${name}" added${sourceSheet?" to "+((SHEET_COLORS[sourceSheet]||{label:sourceSheet}).label):""}  ✦`);
+  } else {
+    const ci=$id("cost-inp");
+    const bi=$id("brand-inp");
+    if(ci&&ci.value!=="") item.ppu=parseFloat(ci.value)||item.ppu;
+    if(bi&&bi.value.trim()&&bi.value.trim()!=="—") item.brand=bi.value.trim();
+    item.cm=parseFloat(((item.cm||0)+amt).toFixed(4));
+    toast(`+${fmt(amt)} ${item.unit} of ${name} logged ✓`);
+  }
+  const now=new Date();
+  logEntries.unshift({id:uid(),name,amount:amt,unit:item.unit,mode:S.unitMode,
+    packSize:S.packSize,packCount:S.packCount,sourceSheet:item.sourceSheet||"",
+    ts:now.toISOString(),tsDisplay:now.toLocaleString()});
+  saveData();
+  _qtyToNameFlag=false;
+
+  S.itemName=""; S.qty=""; S.packCount=""; S.showSug=false; S.activeIdx=-1; S.activeSheet="";
+  // Reset directUnit to gm for new items only; keep for existing items (same unit next time)
+  if(wasNew) S.directUnit="gm";
+  updatePills();
+
+  // Clear fields in DOM
+  const ni=$id("name-inp"); if(ni) ni.value="";
+  const qi=$id("qty-inp");  if(qi) qi.value="";
+  const pi=$id("pck-inp");  if(pi) pi.value="";
+  const costInp=$id("cost-inp"); if(costInp) costInp.value="";
+  const brandInp=$id("brand-inp"); if(brandInp) brandInp.value="";
+
+  patchSugZone();
+  patchNameInfo();
+  patchKD();
+
+  // Return focus to name field
+  if(ni){ ni.focus(); try{ ni.select(); }catch(x){} }
+}
+
+
+// ═══════════════════════════════════════════════════════
+// ══ ITEM MODAL (Add / Edit) ══════════════════════════════
+// ═══════════════════════════════════════════════════════
+let _modalEditId=null; // null = new, string = existing item id
+
+function openItemModal(editId){
+  _modalEditId=editId||null;
+  const overlay=$id("item-modal-overlay");
+  const heading=$id("modal-heading");
+  if(!overlay) return;
+
+  // Populate fields
+  if(_modalEditId){
+    const row=db.find(d=>d.id===_modalEditId);
+    if(!row) return;
+    heading.textContent="EDIT INGREDIENT";
+    $id("m-name").value=row.name||"";
+    $id("m-unit").value=row.unit||"gm";
+    $id("m-ppu").value=row.ppu||"";
+    $id("m-packqty").value="";
+    $id("m-packprice").value="";
+    $id("m-cm").value=row.cm||"";
+    $id("m-lm").value=row.lm||"";
+    $id("m-brand").value=row.brand!=="—"?(row.brand||""):"";
+    $id("m-supplier").value=row.supplier||"";
+    const msheet=$id("m-sheet");
+    if(msheet){
+      const sheetVal=row.sourceSheet||"";
+      if(sheetVal && !Array.from(msheet.options).some(o=>o.value===sheetVal)){
+        const opt=document.createElement("option");
+        opt.value=sheetVal; opt.textContent=sheetVal;
+        const newOpt=msheet.querySelector('option[value="__new__"]');
+        if(newOpt) msheet.insertBefore(opt,newOpt); else msheet.appendChild(opt);
+        if(!SHEET_COLORS[sheetVal]){
+          const palette=[
+            {bg:"#fef3c7",color:"#92400e"},{bg:"#e0f2fe",color:"#075985"},
+            {bg:"#f0fdf4",color:"#166534"},{bg:"#fdf4ff",color:"#6b21a8"},
+            {bg:"#fff7ed",color:"#9a3412"},{bg:"#f0fdfa",color:"#115e59"},
+          ];
+          const idx=Object.keys(SHEET_COLORS).length%palette.length;
+          SHEET_COLORS[sheetVal]={...palette[idx],label:sheetVal};
+        }
+      }
+      msheet.value=sheetVal;
+    }
+  } else {
+    heading.textContent="ADD / UPDATE INGREDIENT";
+    ["m-name","m-ppu","m-packqty","m-packprice","m-cm","m-lm","m-brand","m-supplier"].forEach(id=>{
+      const el=$id(id); if(el) el.value="";
+    });
+    $id("m-unit").value="gm";
+    $id("m-cost-calc").textContent="";
+    const msheet=$id("m-sheet"); if(msheet) msheet.value="";
+    const msnw=$id("m-sheet-new-wrap"); if(msnw) msnw.style.display="none";
+    const msni=$id("m-sheet-new"); if(msni) msni.value="";
+  }
+
+  overlay.classList.add("open");
+  setTimeout(()=>{ const n=$id("m-name"); if(n){n.focus();try{n.select();}catch(x){}} },80);
+  wireModal();
+}
+
+function closeItemModal(){
+  const overlay=$id("item-modal-overlay");
+  if(overlay) overlay.classList.remove("open");
+  _modalEditId=null;
+}
+
+function wireModal(){
+  // Auto-calc cost per unit from pack qty + pack price
+  function recalcPPU(){
+    const qty=parseFloat($id("m-packqty").value)||0;
+    const price=parseFloat($id("m-packprice").value)||0;
+    const calc=$id("m-cost-calc");
+    if(qty>0&&price>0){
+      const ppu=(price/qty);
+      if(calc) calc.textContent="→ "+fmtCost(ppu)+" / "+($id("m-unit").value||"unit");
+      // Auto-fill ppu field if user hasn't typed one
+      const ppuInp=$id("m-ppu");
+      if(ppuInp&&(!ppuInp.value||ppuInp.dataset.autofilled==="1")){
+        ppuInp.value=ppu.toFixed(6);
+        ppuInp.dataset.autofilled="1";
+      }
+    } else {
+      if(calc) calc.textContent="";
+    }
+  }
+
+  const pq=$id("m-packqty"); if(pq){ pq.addEventListener("input",recalcPPU); }
+  const pp=$id("m-packprice"); if(pp){ pp.addEventListener("input",recalcPPU); }
+  const mu=$id("m-unit"); if(mu){ mu.addEventListener("change",recalcPPU); }
+
+  // Clear autofilled flag if user types ppu manually
+  const ppuInp=$id("m-ppu");
+  if(ppuInp) ppuInp.addEventListener("input",function(){ this.dataset.autofilled="0"; });
+
+  // Brand custom dropdown
+  const mb=$id("m-brand"), mbd=$id("modal-brand-drop");
+  if(mb&&mbd){
+    function getModalBrands(){ return [...new Set(db.map(d=>d.brand).filter(b=>b&&b!=="—"))].sort(); }
+    function showMBrandDrop(filter){
+      const q=(filter||"").toLowerCase().trim();
+      const matches=getModalBrands().filter(b=>!q||b.toLowerCase().includes(q));
+      if(!matches.length){ mbd.style.display="none"; return; }
+      mbd.innerHTML=matches.map(b=>`<li data-brand="${esc(b)}">${esc(b)}</li>`).join("");
+      mbd.style.display="block";
+    }
+    mb.addEventListener("focus",function(){ showMBrandDrop(this.value); });
+    mb.addEventListener("input",function(){ showMBrandDrop(this.value); });
+    mb.addEventListener("blur",function(){ setTimeout(()=>mbd.style.display="none",220); });
+    mbd.addEventListener("mousedown",function(e){
+      const li=e.target.closest("li[data-brand]");
+      if(li){ e.preventDefault(); mb.value=li.dataset.brand; mbd.style.display="none"; }
+    });
+    mbd.addEventListener("touchend",function(e){
+      const li=e.target.closest("li[data-brand]");
+      if(li){ if(!isTap(e)) return; e.preventDefault(); mb.value=li.dataset.brand; mbd.style.display="none"; }
+    },{passive:false});
+  }
+
+  // Cancel
+  const cancelBtn=$id("modal-cancel-btn");
+  if(cancelBtn){ cancelBtn.onclick=closeItemModal; }
+
+  // Close on overlay background tap
+  const overlay=$id("item-modal-overlay");
+  if(overlay){ overlay.onclick=function(e){ if(e.target===overlay) closeItemModal(); }; }
+
+  // Save
+  const saveBtn=$id("modal-save-btn");
+  if(saveBtn){ saveBtn.onclick=saveItemModal; }
+
+  // Enter key on last field triggers save
+  const sup=$id("m-supplier");
+  if(sup){ sup.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); saveItemModal(); } }); }
+
+  // Sheet / Category — show new-category input when "__new__" selected
+  const msheet=$id("m-sheet"), msnw=$id("m-sheet-new-wrap"), msni=$id("m-sheet-new");
+  if(msheet&&msnw){
+    msheet.addEventListener("change",function(){
+      const isNew=this.value==="__new__";
+      msnw.style.display=isNew?"block":"none";
+      if(isNew&&msni){ setTimeout(()=>{ msni.focus(); },60); }
+    });
+  }
+  if(msni){ msni.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); saveItemModal(); } }); }
+}
+
+function saveItemModal(){
+  const name=($id("m-name").value||"").trim();
+  if(!name){ toast("Name is required","err"); $id("m-name").focus(); return; }
+
+  const unit=$id("m-unit").value||"gm";
+  const ppu=parseFloat($id("m-ppu").value)||0;
+  const cm=parseFloat($id("m-cm").value)||0;
+  const lm=parseFloat($id("m-lm").value)||0;
+  const brand=($id("m-brand").value||"").trim()||"—";
+  const supplier=($id("m-supplier").value||"").trim()||"";
+  let sourceSheet=($id("m-sheet").value||"").trim();
+  if(sourceSheet==="__new__"){
+    sourceSheet=(($id("m-sheet-new").value)||"").trim().toUpperCase();
+    if(!sourceSheet){ toast("Enter a name for the new category","err"); $id("m-sheet-new").focus(); return; }
+    // Register in SHEET_COLORS if not already there
+    if(!SHEET_COLORS[sourceSheet]){
+      // Pick a colour from a palette cycling through hues
+      const palette=[
+        {bg:"#fef3c7",color:"#92400e"},{bg:"#e0f2fe",color:"#075985"},
+        {bg:"#f0fdf4",color:"#166534"},{bg:"#fdf4ff",color:"#6b21a8"},
+        {bg:"#fff7ed",color:"#9a3412"},{bg:"#f0fdfa",color:"#115e59"},
+        {bg:"#fef2f2",color:"#991b1b"},{bg:"#f9fafb",color:"#374151"},
+      ];
+      const idx=Object.keys(SHEET_COLORS).length%palette.length;
+      SHEET_COLORS[sourceSheet]={...palette[idx],label:sourceSheet};
+      // Also add to the modal dropdown for future use
+      const sel=$id("m-sheet");
+      if(sel){
+        const newOpt=document.createElement("option");
+        newOpt.value=sourceSheet; newOpt.textContent=sourceSheet;
+        sel.insertBefore(newOpt, sel.querySelector('option[value="__new__"]'));
+        sel.value=sourceSheet;
+      }
+    }
+  }
+
+  if(_modalEditId){
+    // Edit existing
+    const row=db.find(d=>d.id===_modalEditId);
+    if(!row){ toast("Item not found","err"); return; }
+    row.name=name; row.unit=unit; row.ppu=ppu;
+    row.cm=cm; row.lm=lm; row.brand=brand; row.supplier=supplier;
+    if(sourceSheet) row.sourceSheet=sourceSheet; else row.sourceSheet=row.sourceSheet||"";
+    toast("Item updated ✓");
+  } else {
+    // Duplicate = same name + same sheet + same brand
+    const nb_=(brand||"—").toLowerCase().replace(/[^a-z0-9]/g,"");
+    const dup=db.find(d=>{
+      if(d.name.toLowerCase()!==name.toLowerCase()) return false;
+      const ds=(d.sourceSheet||"").toLowerCase().trim();
+      const ns=(sourceSheet||"").toLowerCase().trim();
+      if(ds && ns && ds!==ns) return false;
+      const db_=(d.brand||"—").toLowerCase().replace(/[^a-z0-9]/g,"");
+      if(db_&&nb_&&db_!=="—"&&nb_!=="—"&&db_!==nb_) return false;
+      return true;
+    });
+    if(dup){
+      dup.unit=unit; dup.ppu=ppu; dup.cm=cm; dup.lm=lm;
+      dup.brand=brand; dup.supplier=supplier;
+      if(sourceSheet) dup.sourceSheet=sourceSheet; else dup.sourceSheet=dup.sourceSheet||"";
+      toast(`"${name}" updated ✓`);
+    } else {
+      db.unshift({id:uid(),name,unit,ppu,cm,lm,brand,supplier,sourceSheet:sourceSheet||""});
+      toast(`"${name}" added ✦`);
+    }
+  }
+
+  saveData();
+  updatePills();
+  closeItemModal();
+  if(S.tab==="database") rebuildDb();
+}
+
+// ═══════════════════════════════════════════════════════
+// ══ DATABASE TAB ════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+function buildDb(){
+  // Get all unique categories from db — exclude hidden ones from dropdown
+  const allCats=[...new Set(db.map(d=>d.sourceSheet).filter(Boolean))].sort();
+  const visibleCats=allCats.filter(c=>!_hiddenCats.has(c));
+
+  // If currently selected category is now hidden, reset to All
+  if(S.dbCategory && _hiddenCats.has(S.dbCategory)) S.dbCategory="";
+
+  let rows=filterDb(S.dbSearch);
+  // Exclude hidden categories from results
+  rows=rows.filter(({item:r})=>!_hiddenCats.has(r.sourceSheet||""));
+  // When searching: show results across ALL visible categories
+  // When not searching: apply category filter normally
+  if(!S.dbSearch && S.dbCategory) rows=rows.filter(({item:r})=>r.sourceSheet===S.dbCategory);
+  if(S.dbHideZero) rows=rows.filter(({item:r})=>r.cm>0);
+  const visibleRows=rows;
+
+  // If search active but no results in current category — check if found in other sheets
+  let crossSheetHint="";
+  if(S.dbSearch && !rows.length){
+    const allMatches=filterDb(S.dbSearch).filter(({item:r})=>!_hiddenCats.has(r.sourceSheet||""));
+    if(allMatches.length){
+      const sheets=[...new Set(allMatches.map(({item:r})=>r.sourceSheet||"—"))];
+      crossSheetHint=`<div class="empty" style="color:#7a6a55">
+        "<strong>${esc(S.dbSearch)}</strong>" not in this category —
+        found in: <strong>${sheets.map(s=>(SHEET_COLORS[s]||{label:s}).label).join(", ")}</strong>
+        <button onclick="S.dbCategory='';rebuildDb();" style="margin-left:8px;background:#5b21b6;color:#fff;border:none;border-radius:8px;padding:3px 10px;font-size:11px;font-weight:700;cursor:pointer">Search All</button>
+      </div>`;
+    }
+  }
+
+  const visibleDbCount=db.filter(d=>!_hiddenCats.has(d.sourceSheet||"")).length;
+  const catDropdown=`<div style="display:flex;gap:8px;align-items:center;margin-bottom:${_hiddenCats.size>0?'6':'10'}px">
+    <div style="position:relative;flex:1">
+      <select id="cat-sel" style="width:100%;background:#f5f0e8;border:1.5px solid #bfae96;border-radius:10px;padding:9px 32px 9px 12px;color:#1a1208;font-size:13px;font-weight:700;appearance:none;-webkit-appearance:none;cursor:pointer;background-image:url(&quot;data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a6a55' stroke-width='2' fill='none'/%3E%3C/svg%3E&quot;);background-repeat:no-repeat;background-position:right 10px center;background-color:#f5f0e8">
+        <option value="">All (${visibleDbCount})</option>
+        ${visibleCats.map(cat=>{
+          const c=SHEET_COLORS[cat]||{label:cat};
+          const cnt=db.filter(d=>d.sourceSheet===cat).length;
+          return `<option value="${esc(cat)}"${S.dbCategory===cat?" selected":""}>${c.label} (${cnt})</option>`;
+        }).join("")}
+      </select>
+    </div>
+    <button onclick="openHiddenCatsPanel()" title="Manage visible categories" style="flex-shrink:0;background:${_hiddenCats.size>0?'#fef3c7':'#f5f0e8'};border:1.5px solid ${_hiddenCats.size>0?'#f59e0b':'#bfae96'};border-radius:10px;padding:8px 10px;font-size:15px;cursor:pointer;line-height:1">${_hiddenCats.size>0?'🙈':'👁'}</button>
+    <button class="mode-btn${S.dbHideZero?' on':''}" id="hide-zero-btn" style="white-space:nowrap;font-size:11px;padding:8px 10px;flex-shrink:0">
+      ${S.dbHideZero?'👁 Show All':'🚫 Zero'}
+    </button>
+  </div>
+  ${_hiddenCats.size>0?`<div style="background:#fef3c7;border:1.5px solid #f59e0b;border-radius:8px;padding:6px 10px;margin-bottom:8px;display:flex;align-items:center;justify-content:space-between;gap:8px">
+    <span style="font-size:11px;font-weight:700;color:#92400e">🙈 ${_hiddenCats.size} categor${_hiddenCats.size===1?"y":"ies"} hidden (${db.length-visibleDbCount} items)</span>
+    <button onclick="clearAllHidden()" style="background:#f59e0b;color:#fff;border:none;border-radius:8px;padding:3px 9px;font-size:11px;font-weight:700;cursor:pointer">Show All</button>
+  </div>`:""}`;
+
+
+  const tbody=rows.map(({item:r,nh,bh})=>{
+    const chk=_dbSelectedIds.has(r.id)?"checked":"";
+    // Status: 0=ok, 1=this month zero (amber), 2=both months zero (red)
+    const status=r.cm>0?0:(r.lm>0?1:2);
+    // Progress bar width: this month / last month ratio (capped at 100%)
+    const ratio=r.lm>0?Math.min(100,Math.round((r.cm/r.lm)*100)):( r.cm>0?100:0);
+    const barColor=status===0?"#059669":status===1?"#d97706":"#dc2626";
+    const rowBg=status===2?"background:#fef2f2":status===1?"background:#fffbeb":"";
+    const rowBorder=status===2?"border-left:3px solid #dc2626;":"";
+    const icon=status===1
+      ?`<i class="ti ti-alert-triangle" style="font-size:12px;color:#d97706;flex-shrink:0" aria-label="not logged this month"></i>`
+      :status===2
+      ?`<i class="ti ti-alert-circle" style="font-size:12px;color:#dc2626;flex-shrink:0" aria-label="zero stock both months"></i>`
+      :"";
+    return `<tr class="trow${_dbSelectedIds.has(r.id)?" selected-row":""}" style="${rowBg};${rowBorder}">
+      <td><input type="checkbox" class="row-chk" data-id="${r.id}" ${chk} style="width:16px;height:16px;cursor:pointer"/></td>
+      <td class="name-cell search-match">
+        <div style="display:flex;align-items:center;gap:4px">${nh}${icon}</div>
+        <div style="height:3px;border-radius:2px;background:#e0dbd0;margin-top:3px;width:100%">
+          <div style="height:3px;border-radius:2px;background:${barColor};width:${ratio}%;transition:width .3s"></div>
+        </div>
+      </td>
+      <td class="search-match" style="color:#4a3820">${bh||"—"}</td>
+      <td><span class="unit-chip">${r.unit}</span></td>
+      <td style="font-weight:600">${r.ppu}</td>
+      <td style="font-weight:600">${fmt(r.lm)}</td>
+      <td style="color:${r.cm>0?"#1e5c3a":status===2?"#dc2626":"#6b5c45"};font-weight:${r.cm>0?700:500}">${fmt(r.cm)}</td>
+      <td style="white-space:nowrap">
+        <button class="edit-btn" data-edit="${r.id}">✏</button>
+        <button class="del-btn" data-del="${r.id}">🗑</button>
+      </td></tr>`;
+  }).join("");
+
+  return `<div class="card">
+    <div style="display:flex;gap:8px;margin-bottom:10px;align-items:center">
+      <div style="position:relative;flex:1">
+        <input id="db-srch" class="inp"
+          type="search"
+          placeholder="🔍 Search name or brand…"
+          value="${esc(S.dbSearch)}"
+          autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"
+          style="margin-bottom:0"
+        />
+        ${S.dbSearch?`<button id="srch-clr" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#6b5c45;font-size:20px;cursor:pointer;line-height:1">×</button>`:""}
+      </div>
+      <button class="small-purple-btn" id="add-row-btn" style="flex-shrink:0">+ Add</button>
+    </div>
+    ${catDropdown}
+    <div id="db-action-bar" style="display:flex;gap:8px;margin-bottom:10px;align-items:center;flex-wrap:wrap">
+      <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:#4a3820;font-weight:700;cursor:pointer">
+        <input type="checkbox" id="sel-all-chk" style="width:16px;height:16px;cursor:pointer"
+          ${_dbSelectedIds.size>0&&_dbSelectedIds.size===visibleRows.length&&visibleRows.length>0?"checked":""}/>
+        Select All (${visibleRows.length})
+      </label>
+      ${_dbSelectedIds.size>0?`
+        <button class="del-btn" id="bulk-del-btn" style="font-size:12px;padding:5px 12px;border-radius:10px">
+          🗑 Delete ${_dbSelectedIds.size} selected
+        </button>
+        <button class="cancel-btn" id="desel-btn" style="font-size:12px;padding:5px 10px;border-radius:10px">✕ Deselect</button>
+      `:""}
+    </div>
+    ${crossSheetHint||( S.dbSearch&&!rows.length?`<div class="empty">No match for "<strong>${esc(S.dbSearch)}</strong>"</div>`:""  )}
+    <div class="tbl-wrap"><table>
+      <thead><tr><th style="width:28px"></th><th>Name</th><th>Brand</th><th>Unit</th><th>Price/Unit</th><th id="th-lm">${lastMonthName()}</th><th id="th-cm">${currentMonthName()}</th><th></th></tr></thead>
+      <tbody>${tbody}</tbody>
+    </table></div>
+  </div>`;
+}
+
+// Updates just the bulk-action bar without full rebuild
+function _updateActionBar(totalVisible){
+  const bar=document.getElementById("db-action-bar");
+  if(!bar) return;
+  if(_dbSelectedIds.size>0){
+    bar.innerHTML=`
+      <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:#4a3820;font-weight:700;cursor:pointer">
+        <input type="checkbox" id="sel-all-chk" style="width:16px;height:16px;cursor:pointer"
+          ${_dbSelectedIds.size===totalVisible&&totalVisible>0?"checked":""}/>
+        Select All (${totalVisible})
+      </label>
+      <button class="del-btn" id="bulk-del-btn" style="font-size:12px;padding:5px 12px;border-radius:10px">
+        🗑 Delete ${_dbSelectedIds.size} selected
+      </button>
+      <button class="cancel-btn" id="desel-btn" style="font-size:12px;padding:5px 10px;border-radius:10px">✕ Deselect</button>`;
+  } else {
+    bar.innerHTML=`
+      <label style="display:flex;align-items:center;gap:5px;font-size:12px;color:#4a3820;font-weight:700;cursor:pointer">
+        <input type="checkbox" id="sel-all-chk" style="width:16px;height:16px;cursor:pointer"/>
+        Select All (${totalVisible})
+      </label>`;
+  }
+  // Re-wire select-all (desel and bulk-del are handled by card delegation)
+  const sa=$id("sel-all-chk");
+  if(sa) sa.addEventListener("change",function(){
+    let rows=filterDb(S.dbSearch);
+    rows=rows.filter(({item:r})=>!_hiddenCats.has(r.sourceSheet||""));
+    if(!S.dbSearch && S.dbCategory) rows=rows.filter(({item:r})=>r.sourceSheet===S.dbCategory);
+    if(S.dbHideZero) rows=rows.filter(({item:r})=>r.cm>0);
+    if(this.checked) rows.forEach(({item:r})=>_dbSelectedIds.add(r.id));
+    else _dbSelectedIds.clear();
+    // Update all row checkboxes and highlights in-place
+    document.querySelectorAll(".row-chk").forEach(c=>{
+      c.checked=_dbSelectedIds.has(c.dataset.id);
+      const tr=c.closest("tr");
+      if(tr) tr.classList.toggle("selected-row",c.checked);
+    });
+    _updateActionBar(rows.length);
+  });
+}
+
+function wireDb(){
+  const si=$id("db-srch");
+  if(si){
+    // Only auto-focus on initial tab mount (not after rebuildDb from edit/delete)
+    if(!S.dbSearch) setTimeout(()=>{ if(document.activeElement===document.body) si.focus(); },80);
+    let dbComp=false, _dbIme;
+    si.addEventListener("compositionstart",()=>{ dbComp=true; });
+    si.addEventListener("compositionend",function(){
+      dbComp=false; clearTimeout(_dbIme);
+      S.dbSearch=this.value; patchDbTable();
+    });
+    si.addEventListener("input",function(){
+      clearTimeout(_dbIme);
+      const v=this.value;
+      _dbIme=setTimeout(()=>{ S.dbSearch=v; patchDbTable(); }, dbComp?120:0);
+    });
+    si.addEventListener("keydown",function(e){
+      if(e.key==="Escape"){ S.dbSearch=""; S.editRowId=null; rebuildDb(); }
+    });
+  }
+  const clr=$id("srch-clr");
+  if(clr) clr.addEventListener("click",()=>{ S.dbSearch=""; S.editRowId=null; rebuildDb(); });
+
+  // ── Category dropdown ──
+  const catSel=$id("cat-sel");
+  if(catSel) catSel.addEventListener("change",function(){
+    S.dbCategory=this.value||"";
+    S.dbSearch=""; _dbSelectedIds.clear();
+    rebuildDb();
+  });
+  const hz=$id("hide-zero-btn");
+  if(hz) hz.addEventListener("click",()=>{ S.dbHideZero=!S.dbHideZero; rebuildDb(); });
+
+  // ── Select all checkbox — wired via _updateActionBar ──
+  // Initial wire on first render
+  const visRows=(()=>{
+    let r=filterDb(S.dbSearch);
+    r=r.filter(({item:x})=>!_hiddenCats.has(x.sourceSheet||""));
+    if(!S.dbSearch && S.dbCategory) r=r.filter(({item:x})=>x.sourceSheet===S.dbCategory);
+    if(S.dbHideZero) r=r.filter(({item:x})=>x.cm>0);
+    return r;
+  })();
+  _updateActionBar(visRows.length);
+
+  // ── Bulk delete + Deselect — delegated on card to survive rebuildDb cycles ──
+  if(!wireDb._cardWired){
+    wireDb._cardWired=true;
+    const _cardEl=$id("main-content");
+    _cardEl.addEventListener("click",function(e){
+      if(S.tab!=="database") return;
+      if(!e.target.closest(".card")) return;
+    if(e.target.closest("#bulk-del-btn")){
+      if(!_dbSelectedIds.size) return;
+      if(!confirm(`Delete ${_dbSelectedIds.size} selected item(s)? This cannot be undone.`)) return;
+      db=db.filter(d=>!_dbSelectedIds.has(d.id));
+      _dbSelectedIds.clear();
+      saveData(); rebuildDb(); updatePills();
+      toast("Deleted ✓");
+      return;
+    }
+    if(e.target.closest("#desel-btn")){
+      _dbSelectedIds.clear(); rebuildDb(); return;
+    }
+  });
+  } // end card._cardWired
+
+  const ar=$id("add-row-btn");
+  if(ar) ar.addEventListener("click",()=>{ openItemModal(null); });
+
+  // Delegate all table actions — module-level flag survives rebuildDb
+  if(!wireDb._twWired){
+    wireDb._twWired=true;
+    const twParent=$id("main-content");
+    twParent.addEventListener("click",function(e){
+      if(S.tab!=="database") return;
+    const chk=e.target.closest(".row-chk");
+    const ed=e.target.closest("[data-edit]");
+    const dl=e.target.closest("[data-del]");
+    if(chk){
+      const id=chk.dataset.id;
+      if(chk.checked) _dbSelectedIds.add(id);
+      else _dbSelectedIds.delete(id);
+      const row=chk.closest("tr");
+      if(row) row.classList.toggle("selected-row", chk.checked);
+      const sa=$id("sel-all-chk");
+      let allRows=filterDb(S.dbSearch);
+      allRows=allRows.filter(({item:r})=>!_hiddenCats.has(r.sourceSheet||""));
+      if(!S.dbSearch && S.dbCategory) allRows=allRows.filter(({item:r})=>r.sourceSheet===S.dbCategory);
+      if(S.dbHideZero) allRows=allRows.filter(({item:r})=>r.cm>0);
+      if(sa) sa.checked=_dbSelectedIds.size>0&&_dbSelectedIds.size===allRows.length;
+      _updateActionBar(allRows.length);
+      return;
+    }
+    if(ed){ openItemModal(ed.dataset.edit); return; }
+    if(dl){
+      const delId=dl.dataset.del;
+      const delItem=db.find(d=>d.id===delId);
+      if(!delItem) return;
+      if(!confirm(`Delete "${delItem.name}"?`)) return;
+      db=db.filter(d=>d.id!==delId);
+      _dbSelectedIds.delete(delId);
+      saveData(); rebuildDb(); updatePills();
+      toast("Deleted ✓");
+      return;
+    }
+    });
+  } // end tw._twWired
+}
+
+// Patch only the table body (keeps search input untouched = no cursor jump)
+function patchDbTable(){
+  // Update month name headers
+  const thLm=document.getElementById("th-lm");
+  const thCm=document.getElementById("th-cm");
+  if(thLm) thLm.textContent=lastMonthName();
+  if(thCm) thCm.textContent=currentMonthName();
+
+  updatePills();
+  let rows=filterDb(S.dbSearch);
+  rows=rows.filter(({item:r})=>!_hiddenCats.has(r.sourceSheet||""));
+  if(!S.dbSearch && S.dbCategory) rows=rows.filter(({item:r})=>r.sourceSheet===S.dbCategory);
+  if(S.dbHideZero) rows=rows.filter(({item:r})=>r.cm>0);
+  const tbody2=rows.map(({item:r,nh,bh})=>{
+    const chk=_dbSelectedIds.has(r.id)?"checked":"";
+    const status=r.cm>0?0:(r.lm>0?1:2);
+    const ratio=r.lm>0?Math.min(100,Math.round((r.cm/r.lm)*100)):(r.cm>0?100:0);
+    const barColor=status===0?"#059669":status===1?"#d97706":"#dc2626";
+    const rowBg=status===2?"background:#fef2f2":status===1?"background:#fffbeb":"";
+    const rowBorder=status===2?"border-left:3px solid #dc2626;":"";
+    const icon=status===1
+      ?`<i class="ti ti-alert-triangle" style="font-size:12px;color:#d97706;flex-shrink:0" aria-label="not logged"></i>`
+      :status===2
+      ?`<i class="ti ti-alert-circle" style="font-size:12px;color:#dc2626;flex-shrink:0" aria-label="zero stock"></i>`
+      :"";
+    return `<tr class="trow${_dbSelectedIds.has(r.id)?" selected-row":""}" style="${rowBg};${rowBorder}">
+      <td><input type="checkbox" class="row-chk" data-id="${r.id}" ${chk} style="width:16px;height:16px;cursor:pointer"/></td>
+      <td class="name-cell search-match">
+        <div style="display:flex;align-items:center;gap:4px">${nh}${icon}</div>
+        <div style="height:3px;border-radius:2px;background:#e0dbd0;margin-top:3px;width:100%">
+          <div style="height:3px;border-radius:2px;background:${barColor};width:${ratio}%"></div>
+        </div>
+      </td>
+      <td class="search-match" style="color:#4a3820">${bh||"—"}</td>
+      <td><span class="unit-chip">${r.unit}</span></td>
+      <td style="font-weight:600">${r.ppu}</td>
+      <td style="font-weight:600">${fmt(r.lm)}</td>
+      <td style="color:${r.cm>0?"#1e5c3a":status===2?"#dc2626":"#6b5c45"};font-weight:${r.cm>0?700:500}">${fmt(r.cm)}</td>
+      <td style="white-space:nowrap">
+        <button class="edit-btn" data-edit="${r.id}">✏</button>
+        <button class="del-btn" data-del="${r.id}">🗑</button>
+      </td></tr>`;
+  }).join("");
+
+  const mainContent=$id("main-content");
+  const tb=mainContent?mainContent.querySelector("tbody"):null;
+  if(tb) tb.innerHTML=tbody2;
+  const card=$id("main-content")&&$id("main-content").querySelector(".card");
+  if(!card) return;
+  let em=card.querySelector(".empty");
+  if(S.dbSearch&&!rows.length){
+    if(!em){ const d=document.createElement("div"); d.className="empty"; const tw=card.querySelector(".tbl-wrap"); card.insertBefore(d,tw||null); em=d; }
+    // Check if found in other sheets
+    const allMatches=filterDb(S.dbSearch).filter(({item:r})=>!_hiddenCats.has(r.sourceSheet||""));
+    if(allMatches.length){
+      const sheets=[...new Set(allMatches.map(({item:r})=>r.sourceSheet||"—"))];
+      em.innerHTML=`"<strong>${esc(S.dbSearch)}</strong>" not in this category — found in: <strong>${sheets.map(s=>(SHEET_COLORS[s]||{label:s}).label).join(", ")}</strong> <button onclick="S.dbCategory='';rebuildDb();" style="margin-left:8px;background:#5b21b6;color:#fff;border:none;border-radius:8px;padding:3px 10px;font-size:11px;font-weight:700;cursor:pointer">Search All</button>`;
+    } else {
+      em.innerHTML=`No match for "<strong>${esc(S.dbSearch)}</strong>"`;
+    }
+  } else if(em){ em.remove(); }
+  let clr=$id("srch-clr");
+  if(S.dbSearch&&!clr){
+    const si=$id("db-srch");
+    if(si){
+      const btn=document.createElement("button");
+      btn.id="srch-clr";
+      btn.style.cssText="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:#6b5c45;font-size:20px;cursor:pointer;line-height:1";
+      btn.textContent="×";
+      btn.addEventListener("click",()=>{ S.dbSearch=""; S.editRowId=null; rebuildDb(); });
+      si.parentNode.appendChild(btn);
+    }
+  } else if(!S.dbSearch&&clr){ clr.remove(); }
+}
+
+// Full rebuild only for edit/save/cancel/delete (not while typing)
+function rebuildDb(){
+  $id("main-content").innerHTML=buildDb();
+  wireDb(); updatePills();
+  // Re-focus search if was searching
+  if(S.dbSearch){
+    const si=$id("db-srch");
+    if(si){ si.focus(); const l=si.value.length; try{si.setSelectionRange(l,l);}catch(e){} }
+  }
+}
+
+// ═══════════════════════════════════════════════════════
+// ══ LOG TAB ═════════════════════════════════════════════
+// ═══════════════════════════════════════════════════════
+function buildLog(){
+  const grouped=getGroupedLog();
+  const isGrouped=S.logView==="grouped";
+
+  let rows="";
+  if(isGrouped){
+    rows=grouped.map(e=>{
+      const multiDay=e.count>1;
+      const dateLabel=multiDay
+        ?`${esc(e.firstDisplay)}<br><span style="color:#9a8a75">→ ${esc(e.lastDisplay)}</span>`
+        :esc(e.firstDisplay);
+      const modeLabel=e.mode==="pack"
+        ?`${e.packCount}×${e.packSize}${e.unit}`
+        :"direct";
+      const countBadge=e.count>1
+        ?`<span style="display:inline-block;margin-top:2px;background:#ffe08a;color:#7a5010;border-radius:10px;padding:1px 6px;font-size:10px;font-weight:800">${e.count} merged</span>`
+        :"";
+      return `<tr class="trow">
+        <td style="font-size:11px;color:#5a4a35;font-weight:500;white-space:nowrap">${dateLabel}</td>
+        <td class="name-cell">${esc(e.name)}<br>${countBadge}</td>
+        <td style="color:#1e5c3a;font-weight:700;white-space:nowrap">${fmt(e.amount)} ${esc(e.unit)}</td>
+        <td><span class="unit-chip">${esc(modeLabel)}</span></td>
+        <td></td>
+      </tr>`;
+    }).join("");
+  } else {
+    // Raw view — each individual entry with edit & delete
+    rows=logEntries.map(e=>{
+      const displayTs=e.tsDisplay||e.ts; // backward compat
+      if(S.logEditId===e.id){
+        return `<tr class="trow" style="background:#ece6f8">
+          <td style="font-size:11px;color:#5a4a35;white-space:nowrap">${esc(displayTs)}</td>
+          <td class="name-cell">${esc(e.name)}</td>
+          <td><input class="cell-inp" id="ledit-amt" type="number" step="any" style="width:90px" value="${e.amount}"/> <span style="font-size:11px;color:#5a4a35">${esc(e.unit)}</span></td>
+          <td><span class="unit-chip">${e.mode==="pack"?`${e.packCount}×${e.packSize}${e.unit}`:"direct"}</span></td>
+          <td style="white-space:nowrap">
+            <button class="save-btn" data-lsave="${esc(e.id)}">✓</button>
+            <button class="cancel-btn" data-lcancel="1">✕</button>
+          </td>
+        </tr>`;
+      }
+      return `<tr class="trow">
+        <td style="font-size:11px;color:#5a4a35;font-weight:500;white-space:nowrap">${esc(displayTs)}</td>
+        <td class="name-cell">${esc(e.name)}</td>
+        <td style="color:#1e5c3a;font-weight:700;white-space:nowrap">${fmt(e.amount)} ${esc(e.unit)}</td>
+        <td><span class="unit-chip">${e.mode==="pack"?`${e.packCount}×${e.packSize}${e.unit}`:"direct"}</span></td>
+        <td style="white-space:nowrap">
+          <button class="edit-btn" data-ledit="${esc(e.id)}">✏</button>
+          <button class="del-btn" data-ldel="${esc(e.id)}">🗑</button>
+        </td>
+      </tr>`;
+    }).join("");
+  }
+
+  const totalEntries=isGrouped?grouped.length:logEntries.length;
+  return `<div class="card">
+    <div class="card-header">
+      <span class="card-bar"></span>
+      <span class="card-title">INVENTORY LOG</span>
+      <span class="count-badge">${totalEntries} ${isGrouped?"GROUPS":"ENTRIES"}</span>
+    </div>
+    <hr class="sep"/>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap">
+      <button class="mode-btn${isGrouped?' on':''}" id="log-grp-btn">📦 Grouped</button>
+      <button class="mode-btn${!isGrouped?' on':''}" id="log-raw-btn">📋 All Entries</button>
+      ${!isGrouped?`<span style="font-size:11px;color:#7a6a55;margin-left:4px">Edit or delete individual entries</span>`
+        :`<span style="font-size:11px;color:#7a6a55;margin-left:4px">Same-day merged · 5-day gap splits</span>`}
+    </div>
+    ${!totalEntries
+      ?`<div class="empty">No entries yet — log items from Enter tab.</div>`
+      :`<div class="tbl-wrap"><table>
+          <thead><tr>
+            <th>Date/Time</th><th>Item</th><th>${isGrouped?"Total Amount":"Amount"}</th><th>Mode</th><th></th>
+          </tr></thead>
+          <tbody>${rows}</tbody>
+        </table></div>`}
+    ${!isGrouped&&logEntries.length>0?`<div style="margin-top:10px;text-align:right">
+      <button class="del-btn" id="log-clear-btn" style="font-size:11px;padding:5px 12px">🗑 Clear All</button>
+    </div>`:""}
+  </div>`;
+}
+
+function wireLog(){
+  const grpBtn=$id("log-grp-btn"), rawBtn=$id("log-raw-btn");
+  if(grpBtn) grpBtn.addEventListener("click",()=>{ S.logView="grouped"; S.logEditId=null; rebuildLog(); });
+  if(rawBtn) rawBtn.addEventListener("click",()=>{ S.logView="raw"; S.logEditId=null; rebuildLog(); });
+
+  const clr=$id("log-clear-btn");
+  if(clr&&!clr._wired){
+    clr._wired=true;
+    clr.addEventListener("click",()=>{
+      if(!confirm("Delete ALL log entries? This cannot be undone.")) return;
+      logEntries.forEach(e=>{
+        const it=db.find(d=>d.name.toLowerCase()===e.name.toLowerCase()&&
+          (!e.sourceSheet||(d.sourceSheet||"").toLowerCase()===(e.sourceSheet||"").toLowerCase()));
+        if(it) it.cm=Math.max(0,(it.cm||0)-e.amount);
+      });
+      logEntries=[];
+      invalidateCache();
+      saveData(); updatePills(); rebuildLog();
+      toast("All log entries cleared");
+    });
+  }
+
+  // Table delegation — wired once on main-content (survives rebuildLog)
+  if(!wireLog._wired){
+    wireLog._wired=true;
+    const mc=$id("main-content");
+    mc.addEventListener("click",function(e){
+      if(S.tab!=="log") return;
+      const le=e.target.closest("[data-ledit]");
+      const ld=e.target.closest("[data-ldel]");
+      const ls=e.target.closest("[data-lsave]");
+      const lc=e.target.closest("[data-lcancel]");
+
+      if(le){ S.logEditId=le.dataset.ledit; rebuildLog(); return; }
+
+      if(ld){
+        const id=ld.dataset.ldel;
+        const entry=logEntries.find(x=>x.id===id);
+        if(!entry) return;
+        if(!confirm(`Delete this entry?\n${entry.name} — ${fmt(entry.amount)} ${entry.unit}`)) return;
+        const it=db.find(d=>d.name.toLowerCase()===entry.name.toLowerCase()&&
+          (!entry.sourceSheet||(d.sourceSheet||"").toLowerCase()===(entry.sourceSheet||"").toLowerCase()));
+        if(it) it.cm=Math.max(0,(it.cm||0)-entry.amount);
+        logEntries=logEntries.filter(x=>x.id!==id);
+        invalidateCache();
+        saveData(); updatePills(); rebuildLog();
+        toast("Entry deleted");
+        return;
+      }
+
+      if(ls){
+        const id=ls.dataset.lsave;
+        const entry=logEntries.find(x=>x.id===id);
+        if(!entry) return;
+        const inp=$id("ledit-amt");
+        const newAmt=inp?parseFloat(inp.value)||0:entry.amount;
+        if(newAmt<=0){ toast("Amount must be > 0","err"); return; }
+        const it=db.find(d=>d.name.toLowerCase()===entry.name.toLowerCase()&&
+          (!entry.sourceSheet||(d.sourceSheet||"").toLowerCase()===(entry.sourceSheet||"").toLowerCase()));
+        if(it) it.cm=Math.max(0,(it.cm||0)-entry.amount+newAmt);
+        entry.amount=newAmt;
+        S.logEditId=null;
+        saveData(); updatePills(); rebuildLog();
+        toast("Entry updated ✓");
+        return;
+      }
+
+      if(lc){ S.logEditId=null; rebuildLog(); return; }
+    });
+  }
+}
+
+function rebuildLog(){
+  $id("main-content").innerHTML=buildLog();
+  wireLog();
+  updatePills();
+}
+
+// ═══════════════════════════════════════════════════════
+// ══ IMPORT/EXPORT TAB ═══════════════════════════════════
+// ═══════════════════════════════════════════════════════
+function buildImport(){
+  const act=db.filter(d=>d.cm>0).length;
+  return `<div class="card">
+    <div class="card-header"><span class="card-bar"></span><span class="card-title">IMPORT / EXPORT</span></div>
+    <hr class="sep"/>
+    <div class="io-block">
+      <div class="io-title">📤 Export Excel</div>
+      <div class="io-desc">Download your current data as .xlsx</div>
+      <div class="io-btn-row">
+        <button class="io-btn" id="exp-db">Export Database</button>
+        <button class="io-btn" id="exp-log">Export Log</button>
+      </div>
+    </div>
+    <hr class="io-div"/>
+    <div class="io-block">
+      <div class="io-title">📥 Import Excel</div>
+      <div class="io-desc">Upload .xlsx / .xls / .csv<br>Columns: Name, Unit, Brand, Price/Unit, Last Month, Current Month<br>Matching names are merged.</div>
+      <label class="upload-btn"><input type="file" accept=".xlsx,.xls,.csv" id="imp-file" style="display:none"/> 📂 Choose File & Import</label>
+    </div>
+    <hr class="io-div"/>
+    <div class="io-block">
+      <div class="io-title">💾 Backup & Restore</div>
+      <div class="io-desc">Backup saves everything (database + log) as a JSON file. Restore loads it back — useful when switching devices or browsers.</div>
+      <div class="io-btn-row">
+        <button class="io-btn" id="backup-btn">⬇ Download Backup</button>
+        <label class="io-btn" style="cursor:pointer;text-align:center">⬆ Restore Backup<input type="file" id="restore-file" accept=".json" style="display:none"/></label>
+      </div>
+    </div>
+    <hr class="io-div"/>
+    <div class="io-block">
+      <div class="io-title">📅 Month Management</div>
+      <div class="io-desc">
+        <strong>Close Month</strong> — exports current month data, then moves "This Month" → "Last Month" and resets "This Month" to 0 for all items. Use at the end of each month.<br/>
+        <strong>New Month (reset only)</strong> — same reset without exporting first.
+      </div>
+      <div class="io-btn-row" style="gap:8px;flex-wrap:wrap">
+        <button class="io-btn" id="close-month-btn" style="background:#fff8e8;border-color:#b45309;color:#7a3e00">📤 Close Month &amp; Export</button>
+        <button class="io-btn" id="new-month-btn" style="background:#fff0f0;border-color:#991b1b;color:#7a0000">🔄 New Month (reset only)</button>
+      </div>
+    </div>
+    <hr class="io-div"/>
+    <div class="io-block">
+      <div class="io-title">⚙️ Data Management</div>
+      <div class="io-desc">Reset the item database back to the original 10 default items. Your log entries are kept.</div>
+      <div class="io-btn-row">
+        <button class="io-btn" id="reset-defaults-btn" style="background:#fff0f0;border-color:#c0392b;color:#8b1a1e">↺ Reset to Defaults</button>
+      </div>
+    </div>
+    <hr class="io-div"/>
+    <div class="io-block">
+      <div class="io-title">📊 Summary</div>
+      <div class="sum-grid">
+        <div class="sum-card"><div class="sum-val">${db.length}</div><div class="sum-lbl">Total Items</div></div>
+        <div class="sum-card"><div class="sum-val">${getGroupedLog().length}</div><div class="sum-lbl">Log Entries</div></div>
+        <div class="sum-card"><div class="sum-val">${act}</div><div class="sum-lbl">Active This Month</div></div>
+        <div class="sum-card"><div class="sum-val">${db.length-act}</div><div class="sum-lbl">Not Yet Logged</div></div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function doBackup(){
+  const payload={
+    version:"1.0",
+    exportedAt:new Date().toISOString(),
+    db:db,
+    logEntries:logEntries
+  };
+  const blob=new Blob([JSON.stringify(payload,null,2)],{type:"application/json"});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement("a");
+  a.href=url;
+  a.download="chef_santosh_backup_"+new Date().toISOString().slice(0,10)+".json";
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast("Backup downloaded ✓");
+}
+
+function doRestore(e){
+  const file=e.target.files[0]; if(!file) return;
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      const payload=JSON.parse(ev.target.result);
+      // Validate
+      if(!payload.db||!Array.isArray(payload.db)) throw new Error("Invalid backup: no database array");
+      if(!Array.isArray(payload.logEntries)) throw new Error("Invalid backup: no log array");
+      if(!confirm(`Restore backup from ${payload.exportedAt?new Date(payload.exportedAt).toLocaleString():"unknown date"}?\n\nThis will REPLACE your current database (${payload.db.length} items) and log (${payload.logEntries.length} entries).\n\nThis cannot be undone.`)) return;
+      db=payload.db;
+      logEntries=payload.logEntries;
+      invalidateCache();
+      saveData();
+      updatePills();
+      $id("main-content").innerHTML=buildImport();
+      wireImport();
+      toast(`Restored: ${db.length} items, ${logEntries.length} log entries ✓`);
+    }catch(err){
+      toast("Restore failed: "+err.message,"err");
+      console.error("Restore error:",err);
+    }
+  };
+  reader.onerror=function(){ toast("Could not read file","err"); };
+  reader.readAsText(file);
+  e.target.value="";
+}
+
+function doCloseMonth(exportFirst){
+  const thisMonth=currentMonthName(), lastMonth=lastMonthName();
+  const msg=exportFirst
+    ?`Close ${thisMonth}?\n\n• Export current month data to Excel\n• Move "${thisMonth}" → "${lastMonth}" for all items\n• Reset "${thisMonth}" to 0\n\nThis cannot be undone.`
+    :`Reset to new month?\n\n• Move "${thisMonth}" → "${lastMonth}" for all items\n• Reset "${thisMonth}" to 0\n\nThis cannot be undone.`;
+  if(!confirm(msg)) return;
+
+  if(exportFirst){
+    // Export before resetting
+    if(typeof XLSX==="undefined"){ toast("XLSX not loaded — cannot export","err"); return; }
+    const sorted=[...db].sort((a,b)=>a.name.localeCompare(b.name));
+    const wb2=XLSX.utils.book_new();
+    const hasSheets2=sorted.some(d=>d.sourceSheet);
+    if(hasSheets2){
+      const sheetMap2={};
+      sorted.forEach(d=>{ const s=d.sourceSheet||"General"; if(!sheetMap2[s]) sheetMap2[s]=[]; sheetMap2[s].push(d); });
+      const ordered2=[...new Set(sorted.map(d=>d.sourceSheet||"General"))];
+      ordered2.forEach(sn=>{
+        const ws2=XLSX.utils.json_to_sheet(sheetMap2[sn].map(d=>({
+          Name:d.name, Unit:d.unit, Brand:d.brand||"—",
+          [`Price/Unit (${currency().symbol})`]:d.ppu,
+          [`${thisMonth} (closing)`]:d.cm,
+          [`${lastMonth} (previous)`]:d.lm
+        })));
+        XLSX.utils.book_append_sheet(wb2,ws2,sn.substring(0,31));
+      });
+    } else {
+      const ws2=XLSX.utils.json_to_sheet(sorted.map(d=>({
+        Name:d.name, Unit:d.unit, Brand:d.brand||"—",
+        [`Price/Unit (${currency().symbol})`]:d.ppu,
+        [`${thisMonth} (closing)`]:d.cm,
+        [`${lastMonth} (previous)`]:d.lm
+      })));
+      XLSX.utils.book_append_sheet(wb2,ws2,`${thisMonth} Close`);
+    }
+    XLSX.writeFile(wb2,`chef_santosh_close_${thisMonth.replace(/\s/g,"_")}.xlsx`);
+  }
+
+  // Move cm → lm only if cm > 0; if cm is 0 keep existing lm intact
+  db.forEach(d=>{ if((d.cm||0)>0){ d.lm=d.cm; } d.cm=0; });
+  // Advance working month to the NEXT month automatically
+  const closedMonth=thisMonth;
+  const d=new Date(thisMonth+" 1");
+  if(!isNaN(d.getTime())){
+    d.setMonth(d.getMonth()+1);
+    const nextMonth=d.toLocaleString('default',{month:'long',year:'numeric'});
+    const calMonth=new Date().toLocaleString('default',{month:'long',year:'numeric'});
+    S.workingMonth=(nextMonth===calMonth)?"":nextMonth;
+    updateMonthPill();
+  }
+  saveData();
+  updatePills();
+  $id("main-content").innerHTML=buildImport();
+  wireImport();
+  toast(`${closedMonth} closed ✓ — now logging into ${currentMonthName()}`);
+}
+
+function wireImport(){
+  const ed=$id("exp-db"); if(ed) ed.addEventListener("click",()=>doExport("db"));
+  const el=$id("exp-log"); if(el) el.addEventListener("click",()=>doExport("log"));
+  const fi=$id("imp-file"); if(fi) fi.addEventListener("change",doImport);
+  const bb=$id("backup-btn"); if(bb) bb.addEventListener("click",doBackup);
+  const rf=$id("restore-file"); if(rf) rf.addEventListener("change",doRestore);
+  const cm=$id("close-month-btn"); if(cm) cm.addEventListener("click",()=>doCloseMonth(true));
+  const nm=$id("new-month-btn");   if(nm) nm.addEventListener("click",()=>doCloseMonth(false));
+  const rd=$id("reset-defaults-btn");
+  if(rd) rd.addEventListener("click",()=>{
+    if(!confirm("Reset database to the 10 default items?\nYour log entries will NOT be deleted.")) return;
+    db=getDefaultDb();
+    saveData(); updatePills();
+    $id("main-content").innerHTML=buildImport(); wireImport();
+    toast("Database reset to defaults ✓");
+  });
+}
+
+function doExport(type){
+  if(typeof XLSX==="undefined"){ toast("XLSX not loaded","err"); return; }
+  let data;
+  if(type==="db"){
+    const thisMonth=currentMonthName();
+    const lastMonth=lastMonthName();
+    const sorted=[...db].sort((a,b)=>a.name.localeCompare(b.name));
+
+    const wb=XLSX.utils.book_new();
+
+    // Check if any items have a sourceSheet — if so, split into multiple sheets
+    const hasSheets=sorted.some(d=>d.sourceSheet);
+
+    if(hasSheets){
+      // Group by sourceSheet — use actual sheet names from data, not hardcoded list
+      const sheetMap={};
+      sorted.forEach(d=>{
+        const s=d.sourceSheet||"General";
+        if(!sheetMap[s]) sheetMap[s]=[];
+        sheetMap[s].push(d);
+      });
+      // Maintain insertion order (order sheets appear in data)
+      const orderedSheets=[...new Set(sorted.map(d=>d.sourceSheet||"General"))];
+      orderedSheets.forEach(sheetName=>{
+        const rows=sheetMap[sheetName].map(d=>({
+          "Name":d.name,
+          "Unit":d.unit,
+          "Brand":d.brand||"—",
+          [`Price/Unit (${currency().symbol})`]:d.ppu,
+          [`Last Month (${lastMonth})`]:d.lm,
+          [`This Month (${thisMonth})`]:d.cm
+        }));
+        const ws=XLSX.utils.json_to_sheet(rows);
+        // Set column widths
+        ws["!cols"]=[{wch:30},{wch:8},{wch:20},{wch:14},{wch:14},{wch:16}];
+        XLSX.utils.book_append_sheet(wb,ws,sheetName.substring(0,31));
+      });
+      toast(`Exported ${orderedSheets.length} sheets ✓`);
+    } else {
+      // Single sheet export (no sourceSheet info)
+      const rows=sorted.map(d=>({
+        "Name":d.name,
+        "Unit":d.unit,
+        "Brand":d.brand||"—",
+        [`Price/Unit (${currency().symbol})`]:d.ppu,
+        [`Last Month (${lastMonth})`]:d.lm,
+        [`This Month (${thisMonth})`]:d.cm
+      }));
+      const ws=XLSX.utils.json_to_sheet(rows);
+      ws["!cols"]=[{wch:30},{wch:8},{wch:20},{wch:14},{wch:14},{wch:16}];
+      XLSX.utils.book_append_sheet(wb,ws,"Database");
+      toast("Exported ✓");
+    }
+
+    XLSX.writeFile(wb,"chef_santosh_db_"+new Date().toISOString().slice(0,10)+".xlsx");
+    return;
+
+  } else {
+    // Export grouped log
+    const grouped=getGroupedLog();
+    data=grouped.map(g=>({
+      "Period Start":g.firstDisplay,
+      "Period End":g.count>1?g.lastDisplay:g.firstDisplay,
+      "Entries Merged":g.count,
+      Item:g.name,
+      "Total Amount":parseFloat(g.amount.toFixed(2)),
+      Unit:g.unit,
+      Mode:g.mode,
+      "Pack Size":g.packSize||"",
+      "Pack Count":g.packCount||""
+    }));
+  } // end else (log export)
+  const ws=XLSX.utils.json_to_sheet(data), wb=XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb,ws,"Log");
+  XLSX.writeFile(wb,"chef_santosh_log_"+new Date().toISOString().slice(0,10)+".xlsx");
+  toast("Exported ✓");
+}
+
+function doImport(e){
+  const file=e.target.files[0]; if(!file) return;
+  if(typeof XLSX==="undefined"){ toast("XLSX not loaded","err"); return; }
+
+  const reader=new FileReader();
+  reader.onload=function(ev){
+    try{
+      // Use array buffer — works on all mobile browsers including Samsung/iOS
+      const wb=XLSX.read(new Uint8Array(ev.target.result),{type:"array"});
+
+      // ─────────────────────────────────────────────────────────────
+      // UNIVERSAL SHEET PARSER — works on ANY Excel structure
+      // No hardcoded sheet names. Detects header row, column positions,
+      // and sub-group rows automatically.
+      // ─────────────────────────────────────────────────────────────
+
+      // Keywords that identify each column type (case-insensitive)
+      const COL_NAME_KW   =/name|product|ingredient|item/i;
+      const COL_BRAND_KW  =/brand|supplier|maker/i;
+      const COL_UNIT_KW   =/unit|uom|measure/i;
+      const COL_PRICE_KW  =/price|cost|rate|ppu/i;
+      const COL_LM_KW     =/last\s*m|prev\s*m|old/i;
+      const COL_CM_KW     =/curr\s*m|this\s*m|new|current/i;
+
+      // Brand values that are sheet-level defaults — use global FAKE_BRANDS regex
+
+      function detectMap(rows){
+        // Scan up to first 8 rows looking for the header row
+        // A header row: ≥3 non-empty cells, at least one matches a column keyword
+        for(let i=0;i<Math.min(8,rows.length);i++){
+          const r=rows[i];
+          const cells=r.map(c=>String(c==null?"":c).trim());
+          const nonEmpty=cells.filter(c=>c.length>0);
+          if(nonEmpty.length<2) continue;
+          // Must contain a name-like column
+          const nameIdx=cells.findIndex(c=>COL_NAME_KW.test(c));
+          if(nameIdx<0) continue;
+          // Found header row — map columns
+          const brandIdx =cells.findIndex(c=>COL_BRAND_KW.test(c));
+          const unitIdx  =cells.findIndex(c=>COL_UNIT_KW.test(c));
+          const priceIdx =cells.findIndex(c=>COL_PRICE_KW.test(c));
+          // For LM/CM, look right of name — "OLD" before "NEW" in sticker sheets
+          let lmIdx=-1, cmIdx=-1;
+          cells.forEach((c,j)=>{
+            if(COL_LM_KW.test(c)  && lmIdx<0) lmIdx=j;
+            if(COL_CM_KW.test(c)  && cmIdx<0) cmIdx=j;
+          });
+          return {hdr:i, name:nameIdx, brand:brandIdx, unit:unitIdx,
+                  price:priceIdx, lm:lmIdx, cm:cmIdx};
+        }
+        return null;
+      }
+
+      function isSubGroupRow(row, map){
+        // A sub-group / section-divider row: has a name-column value but
+        // no S/R number, no price, no cm — used in STICKERS NEW as size labels
+        const nameVal=String(row[map.name]||"").trim();
+        if(!nameVal) return false;
+        const hasPrice=map.price>=0 && row[map.price]!=null && String(row[map.price]).trim()!=="";
+        const hasCm   =map.cm>=0    && row[map.cm]!=null    && String(row[map.cm]).trim()!=="";
+        const hasLm   =map.lm>=0    && row[map.lm]!=null    && String(row[map.lm]).trim()!=="";
+        // If none of price/cm/lm exist, it's a group divider
+        if(!hasPrice && !hasCm && !hasLm) return true;
+        return false;
+      }
+
+      const allRows=[];
+      wb.SheetNames.forEach(function(sheetName){
+        const raw=XLSX.utils.sheet_to_json(wb.Sheets[sheetName],{header:1,defval:null});
+        if(!raw.length) return;
+
+        const map=detectMap(raw);
+        if(!map){ console.warn("Skipping sheet (no header found):",sheetName); return; }
+
+        raw.forEach(function(row,i){
+          if(i<=map.hdr) return; // skip header and title rows
+
+          const nameVal=String(row[map.name]==null?"":row[map.name]).trim();
+          if(!nameVal) return;
+
+          // Skip sub-group / section-divider rows (e.g. "4.5 * 4.5 ROUND" in STICKERS NEW)
+          if(isSubGroupRow(row,map)) return;
+
+          // Skip obvious header repeat rows
+          if(COL_NAME_KW.test(nameVal) && !(/[a-z]{3}/i.test(nameVal.replace(/name|product|item/gi,"").trim()))) return;
+
+          const brandRaw=map.brand>=0?String(row[map.brand]==null?"":row[map.brand]).trim():"";
+          const unitRaw =map.unit>=0 ?String(row[map.unit] ==null?"":row[map.unit]).trim() :"pcs";
+          const priceVal=map.price>=0?row[map.price]:null;
+          const lmVal   =map.lm>=0   ?row[map.lm]   :null;
+          const cmVal   =map.cm>=0   ?row[map.cm]    :null;
+
+          allRows.push({
+            _raw:true,
+            _name:nameVal,
+            _unit:unitRaw,
+            _brand:brandRaw,
+            _price:priceVal,
+            _lm:lmVal,
+            _cm:cmVal,
+            "Source Sheet":sheetName
+          });
+        });
+      });
+      function safeNum(v){ const n=parseFloat(v); return isNaN(n)?0:n; }
+      function safeStr(v){ return (v===undefined||v===null)?"":String(v).trim(); }
+
+      // Normalise unit string
+      function normUnit(u){
+        if(!u) return "pcs";
+        const s=u.toString().toUpperCase().trim();
+        if(["KG","KGS"].includes(s)) return "kg";
+        if(["GMS","GM","G","GR","GRM"].includes(s)) return "gm";
+        if(["ML","MLS"].includes(s)) return "ml";
+        if(["LTR","LITRE","LITER","L","LT"].includes(s)) return "ltr";
+        if(["NOS","PCS","PC","NO","NRS","EA","EACH","NUM","NB"].includes(s)) return "pcs";
+        if(["OZ"].includes(s)) return "oz";
+        if(["LB","LBS"].includes(s)) return "lb";
+        if(["JAR","JARS","BOTTLE","BOTT","BOTTLES","BOX","BOXES",
+            "PACK","PACKS","PKT","SACHET","SACHETS","CAN","CANS",
+            "BAG","BAGS","ROLL","ROLLS","TIN","TINS","POUCH","POUCHES",
+            "TUBE","TUBES","STRIP","STRIPS"].includes(s)) return s.toLowerCase();
+        return s.toLowerCase()||"pcs";
+      }
+
+      let added=0, updated=0, skipped=0;
+      const rows=allRows;
+      if(!rows.length){ toast("File is empty or unreadable","err"); return; }
+
+      rows.forEach(function(row){
+        const name=safeStr(row._name);
+        if(!name){ skipped++; return; }
+
+        // Skip exact header/column-label rows that slipped through
+        if(/^(s\/?r\.?|sr\s*no\.?|#|serial|cat\.?|category|name\s*of(\s*the)?\s*product|product\s*name|item\s*name|unit|brand|price)$/i.test(name)){
+          skipped++; return;
+        }
+
+        const sourceSheetVal=safeStr(row["Source Sheet"]);
+        let brandVal=safeStr(row._brand);
+        const unitVal=normUnit(row._unit)||"pcs";
+        const ppuVal=row._price;
+        const lmVal=row._lm;
+        const cmVal=row._cm;
+
+        // Strip brand values that are sheet-level defaults, not real brands
+        // Keep: STICKER, TAG (real brands for sticker items)
+        if(brandVal && FAKE_BRANDS.test(brandVal)) brandVal="";
+        // Also strip if brand exactly equals the sheet name
+        if(brandVal && brandVal.toLowerCase()===sourceSheetVal.toLowerCase()) brandVal="";
+
+        // KEY: name + sourceSheet + brand = unique product identity
+        // Same name, same sheet but DIFFERENT brand = different product (e.g. COCONUT SHREDDED from BLUE PASSION vs KHALIL)
+        const normName=name.toLowerCase().trim();
+        const normSheet=sourceSheetVal.toLowerCase().trim();
+        const normBrand=brandVal.toLowerCase().replace(/[^a-z0-9]/g,"").trim();
+        const idx=db.findIndex(d=>{
+          if(d.name.toLowerCase().trim()!==normName) return false;
+          const ds=(d.sourceSheet||"").toLowerCase().trim();
+          const db_=(d.brand||"—").toLowerCase().replace(/[^a-z0-9]/g,"").trim();
+          // Must match on sheet
+          if(normSheet && ds && ds!==normSheet) return false;
+          // If both have a real brand, they must also match on brand
+          if(normBrand && normBrand!=="—" && db_ && db_!=="—" && db_!==normBrand) return false;
+          return true;
+        });
+        if(idx>=0){
+          const existing=db[idx];
+          if(unitVal)  existing.unit  = unitVal;
+          if(brandVal) existing.brand = brandVal;
+          if(ppuVal!=null && safeNum(ppuVal)>0)  existing.ppu = safeNum(ppuVal);
+          if(lmVal!=null  && safeNum(lmVal)>0)   existing.lm  = safeNum(lmVal);
+          if(cmVal!=null  && safeNum(cmVal)>0)   existing.cm  = safeNum(cmVal);
+          if(sourceSheetVal) existing.sourceSheet=sourceSheetVal;
+          updated++;
+        } else {
+          db.push({
+            id:uid(), name,
+            unit  : unitVal  || "pcs",
+            brand : brandVal || "—",
+            ppu   : safeNum(ppuVal),
+            lm    : safeNum(lmVal),
+            cm    : safeNum(cmVal),
+            sourceSheet: sourceSheetVal||""
+          });
+          added++;
+        }
+      });
+
+      saveData();
+      updatePills();
+      $id("main-content").innerHTML=buildImport();
+      wireImport();
+
+      const msg=`Import done: ${added} added, ${updated} updated${skipped?`, ${skipped} skipped`:""}`;
+      toast(msg);
+      console.log("Import result:",{added,updated,skipped,totalRows:rows.length,db:db.length});
+
+    } catch(err){
+      console.error("Import error:",err);
+      toast("Import failed: "+err.message,"err");
+    }
+  };
+  reader.onerror=function(){ toast("Could not read file","err"); };
+  // ArrayBuffer works on all browsers — binary string is deprecated
+  reader.readAsArrayBuffer(file);
+  e.target.value=""; // allow re-importing same file
+}
+
+// ═══════════════════════════════════════════════════════
+// PWA
+// ═══════════════════════════════════════════════════════
+let _ip=null;
+window.addEventListener("beforeinstallprompt",function(e){
+  e.preventDefault(); _ip=e;
+  const b=$id("install-bar"); if(b) b.style.display="flex";
+});
+$id("install-btn")&&$id("install-btn").addEventListener("click",function(){
+  if(!_ip) return;
+  _ip.prompt(); _ip.userChoice.then(()=>{ _ip=null; const b=$id("install-bar"); if(b) b.style.display="none"; });
+});
+window.addEventListener("appinstalled",function(){
+  const b=$id("install-bar"); if(b) b.style.display="none"; toast("App installed! ✓");
+});
+if("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js").catch(()=>{});
+
+// ═══════════════════════════════════════════════════════
+// BOOT
+// ═══════════════════════════════════════════════════════
+loadData();
+// Restore currency preference
+try{ const sc=localStorage.getItem("cs_currency"); if(sc&&CURRENCIES[sc]) S.currency=sc; }catch(e){}
+const csel=$id("currency-sel");
+if(csel){
+  csel.value=S.currency;
+  csel.addEventListener("change",function(){
+    S.currency=this.value;
+    try{ localStorage.setItem("cs_currency",this.value); }catch(e){}
+    const ml=$id("m-cost-lbl"); if(ml) ml.textContent=`COST PER UNIT (${currency().symbol})`;
+    if(S.tab==="enter"){
+      const mc=$id("main-content");
+      mc.innerHTML=buildEnter(); wireEnter();
+    } else {
+      patchKD();
+    }
+  });
+}
+// Restore active tab button from saved state
+document.querySelectorAll(".tab-btn").forEach(b=>b.classList.toggle("active",b.dataset.tab===S.tab));
+mountTab();
+
+// ── Save state when app is minimized / backgrounded ──────
+// On mobile, visibilitychange fires when you switch apps or lock screen
+document.addEventListener("visibilitychange",function(){
+  if(document.visibilityState==="hidden") saveData();
+});
+// pagehide fires on iOS Safari when app is backgrounded (more reliable than unload)
+window.addEventListener("pagehide",function(){ saveData(); });
+// Also save on any tab switch (already done in switchTab) and periodically
+setInterval(function(){ saveData(); }, 30000); // auto-save every 30s
+</script>
+</body>
+</html>
